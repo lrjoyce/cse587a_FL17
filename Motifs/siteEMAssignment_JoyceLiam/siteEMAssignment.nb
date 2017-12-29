@@ -1,0 +1,856 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     33022,        848]
+NotebookOptionsPosition[     26018,        675]
+NotebookOutlinePosition[     26390,        691]
+CellTagsIndexPosition[     26347,        688]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Site EM Lab Assignment", "Title",
+ CellChangeTimes->{{3.7130431886170607`*^9, 
+  3.7130431962772903`*^9}},ExpressionUUID->"62c6e443-8abb-4028-a3e5-\
+8e6c61161c9a"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ CellChangeTimes->{{3.713043202721311*^9, 
+  3.71304320462673*^9}},ExpressionUUID->"a0fc3aca-e131-4a9e-a1a7-\
+5c04b63eafde"],
+
+Cell["\<\
+In this lab you will implement the expectation maximization part of the MEME+ \
+algorithm described in Bailey and Elkin in the technical report we discussed \
+in class. The outer loops, initialization, and the various \
+\[OpenCurlyDoubleQuote]hacks\[CloseCurlyDoubleQuote] they added to the basic \
+EM model are provided for you, so you can focus on the EM part. However, it \
+is still the most code you\[CloseCurlyQuote]ve had to write so far, but \
+significant amount.\
+\>", "Text",
+ CellChangeTimes->{{3.7130432566419086`*^9, 3.713043305425761*^9}, {
+  3.7130435360653133`*^9, 
+  3.71304368147423*^9}},ExpressionUUID->"d7fb1322-77e8-4395-8150-\
+d604ff670d97"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Files", "Section",
+ CellChangeTimes->{{3.7130437293640347`*^9, 
+  3.7130437310429983`*^9}},ExpressionUUID->"a3299775-a5be-48e6-a996-\
+32439e58bb44"],
+
+Cell["There are four provided code files. ", "Text",
+ CellChangeTimes->{{3.7130439857478867`*^9, 
+  3.7130441594266367`*^9}},ExpressionUUID->"c35babf3-17f8-4cce-b9bf-\
+a2ac2a45cdda"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+siteEMOuterLoops.m contains the outer loops with calls to the functions you \
+will have to write. You need to read the code in this file to understand the \
+assignment.\
+\>", "Item",
+ CellChangeTimes->{{3.713044139224881*^9, 3.713044152793096*^9}, {
+  3.713086570399584*^9, 
+  3.713086580613078*^9}},ExpressionUUID->"0bb35275-7eaa-4d85-929f-\
+448e34400bbd"],
+
+Cell["\<\
+siteEMInternals.m is an essentially empty file for you to put your code init.\
+\
+\>", "Item",
+ CellChangeTimes->{{3.713044139224881*^9, 
+  3.7130441762176247`*^9}},ExpressionUUID->"7e2e24f4-7708-4dde-a5e9-\
+9dce629d3785"],
+
+Cell["\<\
+fixUps.m contains the code for window normalization and updating erasers. You \
+are not require to read this code, although you are encouraged to. The calls \
+to it are already provided in the outer loop code -- you \
+don\[CloseCurlyQuote]t need to call these functions. However, you do need to \
+use the erasers (which are already computed) to modify the expected \
+nucleotide counts inside updatePFMCounts, which you will write.\
+\>", "Item",
+ CellChangeTimes->{{3.713044139224881*^9, 3.713044248282093*^9}, {
+  3.713044332245573*^9, 3.713044414228163*^9}, {3.7130444662144413`*^9, 
+  3.7130444981714354`*^9}},ExpressionUUID->"41af1239-e35e-40d0-b161-\
+de3a0ee1aeda"],
+
+Cell["\<\
+tools.m is a short file containing some accessory functions for reading in \
+the sequence and extracting the most likely sequence \
+(\[OpenCurlyDoubleQuote]consensus\[CloseCurlyDoubleQuote]) from a PFM.\
+\>", "Item",
+ CellChangeTimes->{{3.713044139224881*^9, 3.713044248282093*^9}, {
+  3.713044332245573*^9, 3.713044414228163*^9}, {3.7130444662144413`*^9, 
+  3.713044573382428*^9}},ExpressionUUID->"aae66698-c0f6-4956-8e54-\
+0b2de172c7aa"]
+}, Open  ]],
+
+Cell["There are two test notebooks.", "Text",
+ CellChangeTimes->{{3.713043738474924*^9, 3.7130437642913427`*^9}, {
+  3.713043807605332*^9, 3.713043883381071*^9}, {3.7130445880316887`*^9, 
+  3.713044658919506*^9}, {3.71304469018603*^9, 
+  3.713044692655792*^9}},ExpressionUUID->"11a517b2-aa6b-4c5c-a4ec-\
+451923543bfe"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+siteEMInternalTest.nb tests the lower level functions you will have to \
+implement.\
+\>", "Item",
+ CellChangeTimes->{{3.713044617031576*^9, 3.713044639416593*^9}, {
+  3.713044680439806*^9, 
+  3.713044681379834*^9}},ExpressionUUID->"e792263f-8d4f-492b-8aa1-\
+40bed1b69457"],
+
+Cell["\<\
+siteEMOuterLoopTests.nb  focuses on applying the entire system to input \
+sequences of various sizes and types.\
+\>", "Item",
+ CellChangeTimes->{{3.713044617031576*^9, 
+  3.713044667631625*^9}},ExpressionUUID->"0329e3fa-e03f-4b3d-878c-\
+57eb5b873702"]
+}, Open  ]],
+
+Cell["\<\
+The there are also several sequence files that are referenced in \
+siteEMOuterLoopTests.nb\
+\>", "Text",
+ CellChangeTimes->{{3.713044943302822*^9, 
+  3.713044974246221*^9}},ExpressionUUID->"8666c95f-bead-4a05-9abf-\
+bb3e775dd792"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Data representations", "Section",
+ CellChangeTimes->{{3.713046340762043*^9, 
+  3.713046343597446*^9}},ExpressionUUID->"1a80b3a8-a638-41dd-9a41-\
+21f942ba85f1"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["Position Frequency Matrices",
+  FontWeight->"Bold"],
+ " (PFMs, which I used to call PWMs and sometimes still do by mistake) are \
+represented as a list of lists. Each sublist corresponds to one position \
+within the PFM. It has length 4 and it contains the relative frequencies of \
+nucleotides 1, 2, 3, and 4 in that order. E.g. ",
+ Cell[BoxData[
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{".2", ",", " ", ".2", " ", ",", " ", ".3", ",", " ", ".3"}], 
+     "}"}], ",", "  ", 
+    RowBox[{"{", 
+     RowBox[{".2", ",", " ", ".3", ",", " ", ".2", ",", " ", ".3"}], "}"}]}], 
+   "}"}]], "VerificationTest",
+  CellChangeTimes->{{3.71294581656896*^9, 3.712945906538022*^9}, {
+   3.712946077237143*^9, 3.712946078547147*^9}, {3.713005419901174*^9, 
+   3.7130054207400417`*^9}},ExpressionUUID->
+  "4e5633be-126f-4fb0-a997-991e5eb39ed9"],
+ " represents a PFM of width two. The positions within a PFM are \
+traditionally called \[OpenCurlyDoubleQuote]columns\[CloseCurlyDoubleQuote] \
+because that\[CloseCurlyQuote]s the way PFMs are represented in print. I \
+continue to use that terminology. However, if you try to print these out in \
+matrix form the columns will appear as rows, so don\[CloseCurlyQuote]t -- you\
+\[CloseCurlyQuote]ll just get confused. You can see them transposed into the \
+standard printed form by using the function prettyPrintPFM, which is provided \
+in the tool.m file.  Just remember that \[OpenCurlyDoubleQuote]column\
+\[CloseCurlyDoubleQuote] means position in the PFM. Each column represents a \
+probability distribution on nucleotides so its total must be one. In the \
+code, a PFM is a list of columns."
+}], "Item",
+ CellChangeTimes->{{3.7130463629583483`*^9, 3.713046524759923*^9}, {
+  3.713046664220183*^9, 3.713046893798012*^9}, {3.713086639671226*^9, 
+  3.713086659343294*^9}, {3.713200651649294*^9, 
+  3.7132007332555943`*^9}},ExpressionUUID->"c45c11d6-0f6d-4f3c-85ec-\
+111ed3a775b5"],
+
+Cell[TextData[{
+ StyleBox["Nucleotides",
+  FontWeight->"Bold"],
+ " are represented by the integers 1, 2, 3, 4, as before. This means you can \
+use nucleotides as indices into into the columns of a PFM to get the \
+probabilities of the the individual nucleotides out. The probability of a \
+given nucleotide occurring in a given position is:"
+}], "Item",
+ CellChangeTimes->{{3.7130463629583483`*^9, 3.713046383366272*^9}, {
+  3.71304692630149*^9, 3.713046952997549*^9}, {3.713046984565742*^9, 
+  3.713047026774273*^9}, {3.713086697719864*^9, 
+  3.713086710991084*^9}},ExpressionUUID->"9b2763a4-14a3-43fd-9682-\
+a45fb2c30a78"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"PFM", "[", 
+  RowBox[{"[", 
+   RowBox[{"position", ",", " ", "nucleotide"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.713046992226511*^9, 
+  3.713046992227749*^9}},ExpressionUUID->"b49a9585-e84b-4320-917c-\
+47288afe0fcd"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["Input ",
+  FontWeight->"Bold"],
+ "The input is a list of nucleotide sequences, each of which is a list of \
+nucleotides. They may have any positive integer length, including 1. In the \
+code, \[OpenCurlyDoubleQuote]sequence\[CloseCurlyDoubleQuote] refers to a \
+list of nucleotides and \[OpenCurlyDoubleQuote]input\[CloseCurlyDoubleQuote] \
+refers to a list of sequences.  The input is not shredded into motif-width \
+windows. You are responsible for processing the relevant motif-width windows. \
+You might choose to do this by making an explicit list of overlapping \
+windows. I did it by pulling out windows as I need them by using Take."
+}], "Item",
+ CellChangeTimes->{{3.713086864257227*^9, 
+  3.713087149148543*^9}},ExpressionUUID->"c5209262-2118-499f-a43e-\
+d2097e2f5dfb"],
+
+Cell[TextData[{
+ StyleBox["Posteriors",
+  FontWeight->"Bold"],
+ " This is important. If a given sequence has length n and the motif has \
+width w, the list of posteriors for the sequence has length n-w+1 (think of \
+the limiting case where w=1). The kth posterior in that list is the posterior \
+probability for the sequence from k to k+w-1, inclusive. You do not need to \
+store these indices explicitly. You could store them explicitly, but if you \
+use Map etc you don\[CloseCurlyQuote]t need to. "
+}], "Item",
+ CellChangeTimes->{{3.713086864257227*^9, 3.713087028994522*^9}, {
+  3.7130871583245907`*^9, 3.713087160068048*^9}, {3.713087242982491*^9, 
+  3.713087273581349*^9}, {3.7130875487778063`*^9, 3.713087653402087*^9}, {
+  3.71308770126742*^9, 3.713087791820292*^9}, {3.713087869092436*^9, 
+  3.713087869690049*^9}},ExpressionUUID->"3e2ad774-5bb3-424c-9147-\
+c9f10de42d75"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Useful functions", "Section",
+ CellChangeTimes->{{3.713087885365705*^9, 
+  3.71308788849298*^9}},ExpressionUUID->"5ca6c0be-323a-4edb-8c56-\
+2ac1a6c1da3a"],
+
+Cell["\<\
+Before you start, please make sure you are familiar with the following \
+functions. You are not required to use them, but you may find them useful.\
+\>", "Text",
+ CellChangeTimes->{{3.7130879330063953`*^9, 
+  3.713087989959259*^9}},ExpressionUUID->"677667d5-ec6f-49f1-a30d-\
+f94dac87fe8a"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+sitePosterior, which you wrote for the previous assignment. We can also \
+provide this if you\[CloseCurlyQuote]re not confident of your implementation. \
+Write to the TAs.\
+\>", "Item",
+ CellChangeTimes->{{3.7130879919268084`*^9, 
+  3.713088026510285*^9}},ExpressionUUID->"446387f6-0530-4252-81da-\
+51a57f256064"],
+
+Cell["Take", "Item",
+ CellChangeTimes->{{3.7130879919268084`*^9, 
+  3.7130880301408653`*^9}},ExpressionUUID->"3f3517c6-744e-4123-9e7c-\
+6260b27e8d4b"],
+
+Cell["Total and possibly Normalize (although Total alone will do)", "Item",
+ CellChangeTimes->{{3.7130879919268084`*^9, 
+  3.713088052116232*^9}},ExpressionUUID->"d1f05970-abb0-4cdd-b662-\
+01ea0f87edb1"],
+
+Cell["Product", "Item",
+ CellChangeTimes->{{3.7130879919268084`*^9, 3.713088051190683*^9}, {
+  3.7130881713313627`*^9, 
+  3.713088173102304*^9}},ExpressionUUID->"adffadca-dd17-4e28-8fc2-\
+e1d6b4ee0584"],
+
+Cell["\<\
+TrueQ (useful in the test of an If -- see the Tips notebook).\
+\>", "Item",
+ CellChangeTimes->{{3.7130879919268084`*^9, 3.713088051190683*^9}, {
+  3.7130881713313627`*^9, 
+  3.713088214199534*^9}},ExpressionUUID->"2c9a2450-7d5e-470c-9e6d-\
+28d6db124aa3"],
+
+Cell["\<\
+Remember that you can carry out arithmetic operations at that take two \
+numbers on two lists of numbers, as long as the two lists have the same \
+length.\
+\>", "Item",
+ CellChangeTimes->{{3.7130879919268084`*^9, 3.713088051190683*^9}, {
+  3.7130881713313627`*^9, 
+  3.713088294529923*^9}},ExpressionUUID->"1b48e07e-e995-432a-bd4e-\
+46e112c8679e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"1", ",", " ", "2", ",", "3"}], "}"}], " ", "+", " ", 
+  RowBox[{"{", 
+   RowBox[{"3", ",", " ", "2", ",", " ", "1"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.713088298809301*^9, 
+  3.7130883378985033`*^9}},ExpressionUUID->"d1a81f61-986c-45fa-830e-\
+487ebf0981bc"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"4", ",", "4", ",", "4"}], "}"}]], "Output",
+ CellChangeTimes->{{3.713088332032464*^9, 
+  3.713088338605526*^9}},ExpressionUUID->"d5e583f4-67c9-4e91-bb24-\
+bb483828e4b0"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{" ", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"1", ",", " ", "2", ",", "3"}], "}"}], " ", "*", " ", 
+   RowBox[{"{", 
+    RowBox[{"3", ",", " ", "2", ",", " ", "1"}], "}"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.713088306458436*^9, {3.7130883489021883`*^9, 
+   3.713088351986741*^9}},ExpressionUUID->"f77f4089-c12f-45aa-aa3d-\
+75f94b2a2b38"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"3", ",", "4", ",", "3"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.713088353234744*^9},ExpressionUUID->"7af57293-3d96-42e1-ab51-\
+d01d87ed39fa"]
+}, Open  ]],
+
+Cell["\<\
++=, *= (the left hand side must be a variable or a part of a variable)\
+\>", "Item",
+ CellChangeTimes->{{3.7130883695404882`*^9, 
+  3.71308839515541*^9}},ExpressionUUID->"988f9546-d297-466f-8da0-\
+491db9011486"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"foo", " ", "=", " ", 
+  RowBox[{"Range", "[", "5", "]"}]}]], "Input",
+ CellChangeTimes->{{3.713088403912504*^9, 
+  3.713088424621574*^9}},ExpressionUUID->"9d38ef44-e2ef-4b74-9864-\
+c86dc73e51ea"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.713088427857257*^9},ExpressionUUID->"8aac2354-447d-4999-ad35-\
+3249128a31b7"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"foo", "+=", 
+  RowBox[{"{", 
+   RowBox[{"1", ",", " ", "1", ",", "1", ",", "1", ",", "1"}], 
+   "}"}]}]], "Input",
+ CellChangeTimes->{{3.71308843835697*^9, 
+  3.713088461260275*^9}},ExpressionUUID->"975e7559-c9ea-466e-bcc4-\
+9d703596bf38"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"2", ",", "3", ",", "4", ",", "5", ",", "6"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.7130884623621397`*^9},ExpressionUUID->"b5022974-ecd7-4c4f-8f85-\
+32d67558912a"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Questions", "Section",
+ CellChangeTimes->{{3.713088640767241*^9, 
+  3.713088641894104*^9}},ExpressionUUID->"22ef6245-70df-4176-9d1b-\
+7f84c862ad67"],
+
+Cell["\<\
+Please answer the following questions in a new cell below the question. Don\
+\[CloseCurlyQuote]t start this part until your code passes all the tests \
+provided. You may have to instrument your code a little to get these answers \
+out. If so, retest to make sure your code still passes all the tests.\
+\>", "Text",
+ CellChangeTimes->{{3.713088645478076*^9, 3.713088702599077*^9}, {
+  3.713088740639915*^9, 
+  3.7130887830561733`*^9}},ExpressionUUID->"34521415-9eed-4564-af0f-\
+f738f9682cc0"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Convergence. Using the sequence file smallTest.fasta, how many iterations \
+does it take make MM to converge with accuracy 0.01 and no limit the number \
+of iterations?\
+\>", "ItemNumbered",
+ CellChangeTimes->{{3.7130887870799847`*^9, 3.713088821312454*^9}, {
+   3.713088903931519*^9, 3.7130889107697277`*^9}, {3.7130889409783783`*^9, 
+   3.713088972626582*^9}, {3.713098233955755*^9, 3.713098238017576*^9}, 
+   3.713201040882264*^9},ExpressionUUID->"b179ec5f-f41f-476a-b35f-\
+e3c0ccc8eef8"],
+
+Cell["\<\
+Dependence on initialization.  Using the sequence file smallTest.fasta with \
+max iterations 100 and 0.01, run MM 10 times. Before the first run, call \
+SeedRandom[\[OpenCurlyDoubleQuote]siteEM\[CloseCurlyDoubleQuote]], but do not \
+call SeedRandom between runs. How many different consensus motifs did you \
+get? If you got more than one, how similar were they?\
+\>", "ItemNumbered",
+ CellChangeTimes->{{3.7130887870799847`*^9, 3.713088821312454*^9}, {
+  3.713088903931519*^9, 3.7130889107697277`*^9}, {3.7130889409783783`*^9, 
+  3.713088972626582*^9}, {3.713098233955755*^9, 3.7130984031723537`*^9}, {
+  3.713201051745646*^9, 
+  3.713201095042708*^9}},ExpressionUUID->"6127ac2e-7afa-4d1b-80e6-\
+71b42ebbe1a5"],
+
+Cell["\<\
+Comparison to the online MEME on real promoters. There is a very fancy and \
+heavily engineered MEME implementation available online at \
+http://meme-suite.org/tools/meme. The file PACPlusSeqs.fasta contains \
+segments of the promoters of yeast genes most which encode ribosomal \
+proteins. They are admittedly carefully chose, and these segments (between \
+100 and 300 bp upstream of the start codon) are known to contain most of the \
+instances of the PAC motif.\
+\>", "ItemNumbered",
+ CellChangeTimes->{{3.7130887870799847`*^9, 3.713088821312454*^9}, {
+  3.713088903931519*^9, 3.7130889107697277`*^9}, {3.7130889409783783`*^9, 
+  3.713088972626582*^9}, {3.713098233955755*^9, 3.7130984031723537`*^9}, {
+  3.713201051745646*^9, 3.7132014703110037`*^9}, {3.713201526849119*^9, 
+  3.713201551032013*^9}, {3.7132030653559027`*^9, 
+  3.713203222035739*^9}},ExpressionUUID->"ddf23355-2bef-4147-acc5-\
+fd3787bf66d7"],
+
+Cell["\<\
+First, run your code on the provided sequence file PACPlusSeqs.fasta in the \
+directory Testing. Use motif width 8, accuracy 0.01, and maximum iterations \
+100, True for includeReverseStrand, and 3 for numMotifsToFind (see code \
+below). This may take about 5 minutes to run. If it runs for more than 30 \
+minutes either you have an ancient computer or there is something wrong with \
+your implementation. Examine your 3 outputs, first looking at the consensus \
+(mostly probable base in each position) and then using prettyPrintPFM to look \
+at the actual numbers. \
+\>", "SubitemNumbered",
+ CellChangeTimes->{{3.7130887870799847`*^9, 3.713088821312454*^9}, {
+  3.713088903931519*^9, 3.7130889107697277`*^9}, {3.7130889409783783`*^9, 
+  3.713088972626582*^9}, {3.713098233955755*^9, 3.7130984031723537`*^9}, {
+  3.713201051745646*^9, 3.7132014703110037`*^9}, {3.713201526849119*^9, 
+  3.713201562318233*^9}, {3.7132021784654922`*^9, 3.713202200687709*^9}, {
+  3.713202237960094*^9, 3.713202277229415*^9}, {3.713202357612661*^9, 
+  3.713202364194818*^9}},ExpressionUUID->"97baebee-20a6-42a0-ac07-\
+d1a0decb86bc"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"MM", "[", 
+  RowBox[{
+  "\"\<PACPlusSeqs.fasta\>\"", ",", "8", ",", " ", "0.01", ",", " ", "100", 
+   ",", " ", ".001", ",", " ", "True", ",", " ", "3"}], "]"}]], "Code",
+ CellChangeTimes->{{3.713202305268135*^9, 
+  3.713202370517046*^9}},ExpressionUUID->"a323a0cb-4630-439a-a28d-\
+f89127ece6db"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Now go to the MEME web site, upload the sequence file, change expected \
+frequency to \"one occurrence per sequence\", number of motifs to 3, and \
+under \"Advanced Options\" select \"Search given strand only\
+\[CloseCurlyDoubleQuote] and min and max motif widths both 8. Submit your job \
+and wait a couple of minutes for the results to come up.\
+\>", "SubitemNumbered",
+ CellChangeTimes->{{3.7130887870799847`*^9, 3.713088821312454*^9}, {
+  3.713088903931519*^9, 3.7130889107697277`*^9}, {3.7130889409783783`*^9, 
+  3.713088972626582*^9}, {3.713098233955755*^9, 3.7130984031723537`*^9}, {
+  3.713201051745646*^9, 3.7132014703110037`*^9}, {3.713201526849119*^9, 
+  3.7132016009606028`*^9}, {3.7132019867193623`*^9, 
+  3.713201993789729*^9}},ExpressionUUID->"4b9034ee-c865-4483-b87e-\
+ffcf5368bc67"],
+
+Cell["\<\
+How do your top 3 motifs compare to the top 3 found by the online \
+implementation? Please consider which of the motifs are similar to each \
+other, how similar they are, and how similar motifs were ranked among the 3 \
+output by MEME and the 3 output by your code.\
+\>", "SubitemNumbered",
+ CellChangeTimes->{{3.7130887870799847`*^9, 3.713088821312454*^9}, {
+  3.713088903931519*^9, 3.7130889107697277`*^9}, {3.7130889409783783`*^9, 
+  3.713088972626582*^9}, {3.713098233955755*^9, 3.7130984031723537`*^9}, {
+  3.713201051745646*^9, 3.7132014703110037`*^9}, {3.713201526849119*^9, 
+  3.713201785229006*^9}},ExpressionUUID->"c5e7989b-d0af-4df4-aed0-\
+da60060e8c9c"]
+}, Open  ]],
+
+Cell["\<\
+Compare the motifs found by your implementation and by the online \
+implementation to the motif found by FIRE, as shown in supplemental figure S6 \
+\>", "ItemNumbered",
+ CellChangeTimes->{{3.7130887870799847`*^9, 3.713088821312454*^9}, {
+  3.713088903931519*^9, 3.7130889107697277`*^9}, {3.7130889409783783`*^9, 
+  3.713088972626582*^9}, {3.713098233955755*^9, 3.7130984031723537`*^9}, {
+  3.713201051745646*^9, 3.7132014703110037`*^9}, {3.713201526849119*^9, 
+  3.7132018298757467`*^9}},ExpressionUUID->"9275b24b-0d53-4876-9b7b-\
+1bd79a7ed22a"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Grading", "Section",
+ CellChangeTimes->{{3.713088516390321*^9, 
+  3.713088517580845*^9}},ExpressionUUID->"ea69d17b-e284-426b-a9eb-\
+4c5cd086238c"],
+
+Cell["\<\
+As usual, turn in your entire project, including files that you haven\
+\[CloseCurlyQuote]t changed. This assignment is worth 5 points.\
+\>", "Text",
+ CellChangeTimes->{{3.71308852166055*^9, 3.713088589565325*^9}, {
+  3.715365354291031*^9, 
+  3.715365354483974*^9}},ExpressionUUID->"68f13151-83f4-4443-b422-\
+19c0fd966435"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "1 point for a correct implementation of sequencePosteriors. Must pass all \
+tests ",
+ StyleBox["and be fully correct",
+  FontSlant->"Italic"],
+ "."
+}], "Item",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993207767*^9, 
+  3.713095993208673*^9}},ExpressionUUID->"3f44bd80-e024-4afd-bca9-\
+07f712eacf90"],
+
+Cell[TextData[{
+ "1 point for a correct implementation of updateMotifPrior. Must pass all \
+tests ",
+ StyleBox["and be fully correct",
+  FontSlant->"Italic"],
+ "."
+}], "Item",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 
+  3.713096018264543*^9}},ExpressionUUID->"e1dcd825-4855-478c-bac0-\
+0233cd425837"],
+
+Cell[TextData[{
+ "1 point for a correct implementation of updatePFMCounts. Must pass all \
+tests ",
+ StyleBox["and be fully correct",
+  FontSlant->"Italic"],
+ "."
+}], "Item",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096043111389*^9}},ExpressionUUID->"c0d99002-58d9-4544-a665-\
+1a153ae79df3"],
+
+Cell["\<\
+1 point for passing the outer loop tests and answering all the questions in \
+this notebook. (If all of the above functions are correct then the overall MM \
+will be correct.)\
+\>", "Item",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096055519232*^9}, {3.713203443198737*^9, 
+  3.713203485238751*^9}},ExpressionUUID->"74447064-b687-4914-a7c7-\
+211efd77a258"],
+
+Cell["\<\
+1 point for coding style. This point is only available if you got at least \
+one of the three functions above working correctly. To get it, \
+\>", "Item",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096082274972*^9}, {3.713097660135994*^9, 
+  3.713097861551341*^9}},ExpressionUUID->"c25056f2-e100-43d2-a5a7-\
+3911a2a3f41d"],
+
+Cell[CellGroupData[{
+
+Cell["don't use any global variables, ", "Subitem",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096082274972*^9}, {3.713097660135994*^9, 
+  3.713097837078775*^9}},ExpressionUUID->"088aed53-8032-427b-b8fa-\
+ac49e773cb35"],
+
+Cell["\<\
+use complete English words or phrases as the names of variables and functions\
+\
+\>", "Subitem",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096082274972*^9}, {3.713097660135994*^9, 
+  3.7130978719081583`*^9}},ExpressionUUID->"b1b73b83-30b4-4b79-b5b8-\
+bab51fdd6123"],
+
+Cell["\<\
+add appropriate comments to your code so that people can understand it\
+\>", "Subitem",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096082274972*^9}, {3.713097660135994*^9, 
+  3.7130978907611847`*^9}},ExpressionUUID->"7270d8e5-7e24-4213-a014-\
+963da162a32c"],
+
+Cell["\<\
+don\[CloseCurlyQuote]t do a huge amount of wasted computation or write a lot \
+of unnecessary code -- aim for compactness without compromising readability.\
+\>", "Subitem",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096082274972*^9}, {3.713097660135994*^9, 
+  3.713097938283746*^9}},ExpressionUUID->"c4316b5d-0e57-4371-bc92-\
+d142497110a1"],
+
+Cell["\<\
+use functions on lists (e.g. Total) and carry out arithmetic on lists where \
+appropriate (i.e. list1 + list2 rather than making a loop with indices to add \
+the individual entries).\
+\>", "Subitem",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096082274972*^9}, {3.713097660135994*^9, 
+  3.713098023083362*^9}},ExpressionUUID->"268afd90-74bc-4f53-ba36-\
+cf0eb2ef89fc"],
+
+Cell["\<\
+Break your code up into functions and sub functions when appropriate. General \
+guide: Functions should generally be between 1 and 12 lines long, not \
+counting comments or lines with just brackets or parentheses. This is not a \
+hard rule but will apply to many/most of your functions. There is nothing \
+wrong with 2 and 3 line functions.\
+\>", "Subitem",
+ CellChangeTimes->{{3.713089072028625*^9, 3.713089113644449*^9}, {
+  3.713095993721921*^9, 3.713095995185903*^9}, {3.713096037320117*^9, 
+  3.713096082274972*^9}, {3.713097660135994*^9, 3.713098062423106*^9}, {
+  3.713098095096446*^9, 3.713098136776659*^9}, {3.713098476495442*^9, 
+  3.713098486933734*^9}},ExpressionUUID->"2381c818-a4f6-4b16-877c-\
+4ce198f81cce"]
+}, Open  ]],
+
+Cell["", "Item",
+ CellChangeTimes->{
+  3.71648485746463*^9},ExpressionUUID->"2a1e4373-ea6e-41b5-8abe-29b452bd3d06"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{739, 808},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+Magnification:>1.25 Inherited,
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 169, 3, 128, "Title", "ExpressionUUID" -> \
+"62c6e443-8abb-4028-a3e5-8e6c61161c9a"],
+Cell[CellGroupData[{
+Cell[774, 29, 156, 3, 87, "Section", "ExpressionUUID" -> \
+"a0fc3aca-e131-4a9e-a1a7-5c04b63eafde"],
+Cell[933, 34, 672, 12, 163, "Text", "ExpressionUUID" -> \
+"d7fb1322-77e8-4395-8150-d604ff670d97"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1642, 51, 154, 3, 87, "Section", "ExpressionUUID" -> \
+"a3299775-a5be-48e6-a996-32439e58bb44"],
+Cell[1799, 56, 182, 3, 39, "Text", "ExpressionUUID" -> \
+"c35babf3-17f8-4cce-b9bf-a2ac2a45cdda"],
+Cell[CellGroupData[{
+Cell[2006, 63, 367, 8, 81, "Item", "ExpressionUUID" -> \
+"0bb35275-7eaa-4d85-929f-448e34400bbd"],
+Cell[2376, 73, 231, 6, 59, "Item", "ExpressionUUID" -> \
+"7e2e24f4-7708-4dde-a5e9-9dce629d3785"],
+Cell[2610, 81, 679, 11, 148, "Item", "ExpressionUUID" -> \
+"41af1239-e35e-40d0-b161-de3a0ee1aeda"],
+Cell[3292, 94, 449, 8, 81, "Item", "ExpressionUUID" -> \
+"aae66698-c0f6-4956-8e54-0b2de172c7aa"]
+}, Open  ]],
+Cell[3756, 105, 318, 5, 39, "Text", "ExpressionUUID" -> \
+"11a517b2-aa6b-4c5c-a4ec-451923543bfe"],
+Cell[CellGroupData[{
+Cell[4099, 114, 282, 7, 59, "Item", "ExpressionUUID" -> \
+"e792263f-8d4f-492b-8aa1-40bed1b69457"],
+Cell[4384, 123, 261, 6, 59, "Item", "ExpressionUUID" -> \
+"0329e3fa-e03f-4b3d-878c-57eb5b873702"]
+}, Open  ]],
+Cell[4660, 132, 240, 6, 64, "Text", "ExpressionUUID" -> \
+"8666c95f-bead-4a05-9abf-bb3e775dd792"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4937, 143, 165, 3, 87, "Section", "ExpressionUUID" -> \
+"1a80b3a8-a638-41dd-9a41-21f942ba85f1"],
+Cell[CellGroupData[{
+Cell[5127, 150, 1956, 36, 327, "Item", "ExpressionUUID" -> \
+"c45c11d6-0f6d-4f3c-85ec-111ed3a775b5"],
+Cell[7086, 188, 624, 12, 103, "Item", "ExpressionUUID" -> \
+"9b2763a4-14a3-43fd-9682-a45fb2c30a78"]
+}, Open  ]],
+Cell[7725, 203, 250, 6, 38, "Input", "ExpressionUUID" -> \
+"b49a9585-e84b-4320-917c-47288afe0fcd"],
+Cell[CellGroupData[{
+Cell[8000, 213, 806, 14, 192, "Item", "ExpressionUUID" -> \
+"c5209262-2118-499f-a43e-d2097e2f5dfb"],
+Cell[8809, 229, 881, 15, 148, "Item", "ExpressionUUID" -> \
+"3e2ad774-5bb3-424c-9147-c9f10de42d75"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9739, 250, 160, 3, 87, "Section", "ExpressionUUID" -> \
+"5ca6c0be-323a-4edb-8c56-2ac1a6c1da3a"],
+Cell[9902, 255, 299, 6, 64, "Text", "ExpressionUUID" -> \
+"677667d5-ec6f-49f1-a30d-f94dac87fe8a"],
+Cell[CellGroupData[{
+Cell[10226, 265, 323, 7, 81, "Item", "ExpressionUUID" -> \
+"446387f6-0530-4252-81da-51a57f256064"],
+Cell[10552, 274, 150, 3, 37, "Item", "ExpressionUUID" -> \
+"3f3517c6-744e-4123-9e7c-6260b27e8d4b"],
+Cell[10705, 279, 203, 3, 37, "Item", "ExpressionUUID" -> \
+"d1f05970-abb0-4cdd-b662-01ea0f87edb1"],
+Cell[10911, 284, 202, 4, 37, "Item", "ExpressionUUID" -> \
+"adffadca-dd17-4e28-8fc2-e1d6b4ee0584"],
+Cell[11116, 290, 264, 6, 37, "Item", "ExpressionUUID" -> \
+"2c9a2450-7d5e-470c-9e6d-28d6db124aa3"],
+Cell[11383, 298, 357, 8, 81, "Item", "ExpressionUUID" -> \
+"1b48e07e-e995-432a-bd4e-46e112c8679e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11777, 311, 316, 8, 38, "Input", "ExpressionUUID" -> \
+"d1a81f61-986c-45fa-830e-487ebf0981bc"],
+Cell[12096, 321, 209, 5, 38, "Output", "ExpressionUUID" -> \
+"d5e583f4-67c9-4e91-bb24-bb483828e4b0"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12342, 331, 364, 10, 38, "Input", "ExpressionUUID" -> \
+"f77f4089-c12f-45aa-aa3d-75f94b2a2b38"],
+Cell[12709, 343, 185, 5, 38, "Output", "ExpressionUUID" -> \
+"7af57293-3d96-42e1-ab51-d01d87ed39fa"]
+}, Open  ]],
+Cell[12909, 351, 221, 5, 37, "Item", "ExpressionUUID" -> \
+"988f9546-d297-466f-8da0-491db9011486"],
+Cell[CellGroupData[{
+Cell[13155, 360, 219, 5, 38, "Input", "ExpressionUUID" -> \
+"9d38ef44-e2ef-4b74-9864-c86dc73e51ea"],
+Cell[13377, 367, 205, 5, 38, "Output", "ExpressionUUID" -> \
+"8aac2354-447d-4999-ad35-3249128a31b7"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13619, 377, 263, 7, 38, "Input", "ExpressionUUID" -> \
+"975e7559-c9ea-466e-bcc4-9d703596bf38"],
+Cell[13885, 386, 207, 5, 38, "Output", "ExpressionUUID" -> \
+"b5022974-ecd7-4c4f-8f85-32d67558912a"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14141, 397, 154, 3, 87, "Section", "ExpressionUUID" -> \
+"22ef6245-70df-4176-9d1b-7f84c862ad67"],
+Cell[14298, 402, 501, 9, 114, "Text", "ExpressionUUID" -> \
+"34521415-9eed-4564-af0f-f738f9682cc0"],
+Cell[CellGroupData[{
+Cell[14824, 415, 501, 9, 84, "ItemNumbered", "ExpressionUUID" -> \
+"b179ec5f-f41f-476a-b35f-e3c0ccc8eef8"],
+Cell[15328, 426, 721, 12, 130, "ItemNumbered", "ExpressionUUID" -> \
+"6127ac2e-7afa-4d1b-80e6-71b42ebbe1a5"],
+Cell[16052, 440, 922, 15, 200, "ItemNumbered", "ExpressionUUID" -> \
+"ddf23355-2bef-4147-acc5-fd3787bf66d7"],
+Cell[16977, 457, 1122, 17, 171, "SubitemNumbered", "ExpressionUUID" -> \
+"97baebee-20a6-42a0-ac07-d1a0decb86bc"]
+}, Open  ]],
+Cell[18114, 477, 320, 7, 64, "Code", "ExpressionUUID" -> \
+"a323a0cb-4630-439a-a28d-f89127ece6db"],
+Cell[CellGroupData[{
+Cell[18459, 488, 809, 13, 110, "SubitemNumbered", "ExpressionUUID" -> \
+"4b9034ee-c865-4483-b87e-ffcf5368bc67"],
+Cell[19271, 503, 675, 11, 90, "SubitemNumbered", "ExpressionUUID" -> \
+"c5e7989b-d0af-4df4-aed0-da60060e8c9c"]
+}, Open  ]],
+Cell[19961, 517, 555, 9, 84, "ItemNumbered", "ExpressionUUID" -> \
+"9275b24b-0d53-4876-9b7b-1bd79a7ed22a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20553, 531, 152, 3, 87, "Section", "ExpressionUUID" -> \
+"ea69d17b-e284-426b-a9eb-4c5cd086238c"],
+Cell[20708, 536, 332, 7, 64, "Text", "ExpressionUUID" -> \
+"68f13151-83f4-4443-b422-19c0fd966435"],
+Cell[CellGroupData[{
+Cell[21065, 547, 352, 10, 60, "Item", "ExpressionUUID" -> \
+"3f44bd80-e024-4afd-bca9-07f712eacf90"],
+Cell[21420, 559, 350, 10, 60, "Item", "ExpressionUUID" -> \
+"e1dcd825-4855-478c-bac0-0233cd425837"],
+Cell[21773, 571, 395, 10, 60, "Item", "ExpressionUUID" -> \
+"c0d99002-58d9-4544-a665-1a153ae79df3"],
+Cell[22171, 583, 469, 9, 81, "Item", "ExpressionUUID" -> \
+"74447064-b687-4914-a7c7-211efd77a258"],
+Cell[22643, 594, 434, 8, 59, "Item", "ExpressionUUID" -> \
+"c25056f2-e100-43d2-a5a7-3911a2a3f41d"],
+Cell[CellGroupData[{
+Cell[23102, 606, 321, 5, 29, "Subitem", "ExpressionUUID" -> \
+"088aed53-8032-427b-b8fa-ac49e773cb35"],
+Cell[23426, 613, 378, 8, 50, "Subitem", "ExpressionUUID" -> \
+"b1b73b83-30b4-4b79-b5b8-bab51fdd6123"],
+Cell[23807, 623, 369, 7, 29, "Subitem", "ExpressionUUID" -> \
+"7270d8e5-7e24-4213-a014-963da162a32c"],
+Cell[24179, 632, 452, 8, 70, "Subitem", "ExpressionUUID" -> \
+"c4316b5d-0e57-4371-bc92-d142497110a1"],
+Cell[24634, 642, 479, 9, 70, "Subitem", "ExpressionUUID" -> \
+"268afd90-74bc-4f53-ba36-cf0eb2ef89fc"],
+Cell[25116, 653, 732, 12, 110, "Subitem", "ExpressionUUID" -> \
+"2381c818-a4f6-4b16-877c-4ce198f81cce"]
+}, Open  ]],
+Cell[25863, 668, 115, 2, 37, "Item", "ExpressionUUID" -> \
+"2a1e4373-ea6e-41b5-8abe-29b452bd3d06"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

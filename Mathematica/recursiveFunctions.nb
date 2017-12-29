@@ -1,0 +1,519 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     17302,        511]
+NotebookOptionsPosition[     12713,        390]
+NotebookOutlinePosition[     13295,        413]
+CellTagsIndexPosition[     13209,        408]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Defining recursive functions", "Title",
+ CellChangeTimes->{{3.6177954520229063`*^9, 
+  3.6177954566168833`*^9}},ExpressionUUID->"fb0cb723-c604-47ae-9837-\
+46f59b2dfbe8"],
+
+Cell["The recursion", "Subtitle",
+ CellChangeTimes->{{3.61779548680177*^9, 
+  3.617795490656432*^9}},ExpressionUUID->"0bdc2dea-fbc4-4f00-87a3-\
+ef9baad38be1"],
+
+Cell[TextData[{
+ "You can define recursive functions in ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ ". For example, suppose you, with characteristic hubris, decide to scorn the \
+built-in function for squaring numbers and define you own function. Being the \
+clever and mischievous sort (but not putting a high priority on computational \
+efficiency) you decide to define the square of an integer n recursively, in \
+terms of the square of n-1:"
+}], "Text",
+ CellChangeTimes->{{3.61779551407618*^9, 3.617795536727504*^9}, {
+   3.617795595399476*^9, 3.617795771728853*^9}, 
+   3.713218199353986*^9},ExpressionUUID->"52325db6-cd40-427f-b8d1-\
+0842f4a4a4ad"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"mySquare", "[", "n_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"mySquare", "[", 
+    RowBox[{"n", "-", "1"}], "]"}], "+", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"2", "n"}], "-", "1"}], ")"}]}]}]], "Input",ExpressionUUID->\
+"a932436c-8ecd-4561-bc27-e1135a11dedd"],
+
+Cell[TextData[{
+ "That\[CloseCurlyQuote]s all well and good, but it will run forever without \
+returning a result. Before you evaluate it to demonstrate that, familiarize \
+yourself with ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ "\[CloseCurlyQuote]s Evaluation pull-down menu. You can usually stop an \
+infinite (or seemingly infinite) computation by Evaluation->Abort Evaluation, \
+but that option is grayed out if nothing is evaluating. Just make sure you \
+know how to find it. Now evaluate the following:"
+}], "Text",
+ CellChangeTimes->{{3.6177958199853973`*^9, 3.617795954323818*^9}, {
+  3.617795993179183*^9, 
+  3.617796004826961*^9}},ExpressionUUID->"5ca3610b-1429-49cb-ba53-\
+e45b44b56474"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"mySquare", "[", "3", "]"}]], "Input",
+ CellChangeTimes->{{3.617796007563343*^9, 3.617796017314533*^9}, {
+  3.61779700119576*^9, 
+  3.61779700202604*^9}},ExpressionUUID->"cf66e0d4-cb93-4ea8-9523-\
+4ec51e451558"],
+
+Cell[BoxData[
+ RowBox[{"mySquare", "[", "3", "]"}]], "Output",
+ CellChangeTimes->{
+  3.7132182452599244`*^9},ExpressionUUID->"5387487e-4564-44d0-8f8b-\
+281759420329"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Actually, you don\[CloseCurlyQuote]t need to manually abort this evaluation \
+because ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " has a recursion limit, determined by the value of the global variable \
+$RecursionLimit, which defaults to 1024 and can be modified by setting  \
+$RecursionLimit to some other integer."
+}], "Text",
+ CellChangeTimes->{{3.6177960572243156`*^9, 3.617796069118505*^9}, {
+  3.617796672108254*^9, 
+  3.617796790100544*^9}},ExpressionUUID->"44c04ff4-cb4f-4cdd-8d62-\
+3b0779c40c6b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "$RecursionLimit"}]], "Input",
+ CellChangeTimes->{{3.6177967925694237`*^9, 
+  3.6177968075097237`*^9}},ExpressionUUID->"041f1a61-f09c-4421-9e9d-\
+31cc54c3a7f4"],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox["\<\"$RecursionLimit gives the current limit on the number of \
+levels of recursion that the Wolfram Language can use. \"\>", "MSG"], 
+  "\[NonBreakingSpace]", 
+  ButtonBox[
+   StyleBox["\[RightSkeleton]", "SR"],
+   Active->True,
+   BaseStyle->"Link",
+   ButtonData->"paclet:ref/$RecursionLimit"]}]], "Print", "PrintUsage",
+ CellChangeTimes->{3.713218598920389*^9},
+ CellTags->
+  "Info33713200598-5511807",ExpressionUUID->"b53b1efa-9181-484d-9686-\
+44ae4edf9f9e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The base case", "Subtitle",
+ CellChangeTimes->{{3.61779548680177*^9, 
+  3.6177955019520817`*^9}},ExpressionUUID->"51b49d27-7249-45c4-9f4e-\
+70213b4e2c1a"],
+
+Cell[TextData[{
+ "To make ",
+ StyleBox["mySquare",
+  FontFamily->"Courier",
+  FontSize->13,
+  FontWeight->"Bold"],
+ " work right, you need to define a base-case where the recursion stops. That \
+is particularly simple in ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ ":"
+}], "Text",
+ CellChangeTimes->{{3.61779682492515*^9, 3.617796841789899*^9}, {
+  3.6177969006462584`*^9, 
+  3.6177969657768393`*^9}},ExpressionUUID->"23b3b42a-d4b1-46ed-9349-\
+169f5660db7f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"mySquare", "[", "1", "]"}], "=", "1"}]], "Input",
+ CellChangeTimes->{{3.6177969709583683`*^9, 3.617796982072172*^9}, {
+  3.617797215649414*^9, 
+  3.617797240875717*^9}},ExpressionUUID->"1cac55d1-1da2-4fb5-8e87-\
+feea613cfd24"],
+
+Cell[BoxData["1"], "Output",
+ CellChangeTimes->{
+  3.713218604998824*^9},ExpressionUUID->"252a64a1-b299-44ad-a21b-\
+57c21329321f"]
+}, Open  ]],
+
+Cell["\<\
+Notice that we do not use a := for delayed evaluation here -- it\
+\[CloseCurlyQuote]s fine for the right hand side to be evaluated when we \
+define the function. Now things should work.\
+\>", "Text",
+ CellChangeTimes->{{3.6177970173365307`*^9, 
+  3.6177970708136873`*^9}},ExpressionUUID->"9d9a4a24-9444-4ca2-ae10-\
+e147a322a0d2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"mySquare", "[", "3", "]"}]], "Input",ExpressionUUID->"6e6bd43a-1010-4138-b844-5e71abc29430"],
+
+Cell[BoxData["9"], "Output",
+ CellChangeTimes->{
+  3.713218610514308*^9},ExpressionUUID->"dc24e561-8146-4a02-a23f-\
+02d9d0f20d32"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Table", "[", 
+  RowBox[{
+   RowBox[{"mySquare", "[", "z", "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"z", ",", "10"}], "}"}]}], "]"}]], "Input",ExpressionUUID->\
+"e2606fed-be86-4cf5-836e-f6b3570ef224"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "4", ",", "9", ",", "16", ",", "25", ",", "36", ",", "49", ",", 
+   "64", ",", "81", ",", "100"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.7132186126842756`*^9},ExpressionUUID->"29a66ea4-2c36-4e3c-9739-\
+142b708b1b46"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Important generalization", "Subtitle",
+ CellChangeTimes->{{3.61779548680177*^9, 3.6177955019520817`*^9}, {
+  3.617797097199724*^9, 
+  3.6177971006367702`*^9}},ExpressionUUID->"3cbe547d-b931-4857-aa69-\
+af866f11d2cb"],
+
+Cell["\<\
+Remember this: You can define the value of a function on a particular input \
+and that will override the general rule for that particular input, leaving \
+the rule unchanged for all other inputs. You can do this using either \
+immediate evaluation (=) or delayed evaluation (:=).\
+\>", "Text",
+ CellChangeTimes->{{3.617797104476466*^9, 3.617797205765703*^9}, 
+   3.7132186438767385`*^9},ExpressionUUID->"d986df2b-57e6-4268-9dd8-\
+806e0d62280e"],
+
+Cell[CellGroupData[{
+
+Cell["Practice: Defining recursive functions", "Subsubsubsection",
+ CellChangeTimes->{{3.583175578135281*^9, 3.583175585252611*^9}, {
+  3.583237215724431*^9, 3.583237230152749*^9}, {3.583237385305098*^9, 
+  3.583237408360573*^9}, {3.583350266707965*^9, 3.5833502680112123`*^9}, {
+  3.58342604161637*^9, 3.58342604629023*^9}, {3.583498856500457*^9, 
+  3.5834988629059267`*^9}, {3.583505142291054*^9, 3.5835051472415533`*^9}, {
+  3.583512441172587*^9, 3.5835124550655746`*^9}, {3.583514468298832*^9, 
+  3.583514469463975*^9}, {3.61779736428045*^9, 
+  3.6177973689104767`*^9}},ExpressionUUID->"7acd716e-605a-4fd5-94e0-\
+c90d529cd4c9"],
+
+Cell[TextData[{
+ "The Fibonacci numbers are defined recursively as the sum of previous two \
+Fibonacci numbers. There are two base cases: The first and second Fibonacci \
+numbers are both 1. Define a function ",
+ StyleBox["fibonacci[n]",
+  FontFamily->"Courier",
+  FontSize->13,
+  FontWeight->"Bold"],
+ " that returns the nth Fibonacci number for any positive integer n. (Because \
+of the recursion limit it will only work for n<1024, but \
+don\[CloseCurlyQuote]t worry about that.) If you\[CloseCurlyQuote]re not sure \
+how to do it, refer to the example above. You need to define the recursion \
+and two base cases, one for ",
+ StyleBox["fibonacci[1]",
+  FontFamily->"Courier",
+  FontSize->13,
+  FontWeight->"Bold"],
+ " and one for ",
+ StyleBox["fibonacci[2]",
+  FontFamily->"Courier",
+  FontSize->13,
+  FontWeight->"Bold"],
+ "."
+}], "ItemNumbered",
+ CellChangeTimes->{{3.617797461611758*^9, 3.617797629207663*^9}, {
+   3.61779766705835*^9, 3.617797751803505*^9}, {3.648746121000482*^9, 
+   3.648746127171177*^9}, 
+   3.71321865343701*^9},ExpressionUUID->"8552d6f1-7c60-43af-a244-\
+69d30145e7ab"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"fibonacci", "[", "1", "]"}], " ", "=", " ", "1"}]], "Input",
+ CellChangeTimes->{{3.7132186875913343`*^9, 3.713218691331132*^9}, 
+   3.7132187236992493`*^9, {3.713218860816832*^9, 
+   3.7132188839205265`*^9}},ExpressionUUID->"0bc1054f-62b3-4779-b2fd-\
+0bd0880d1b57"],
+
+Cell[BoxData["1"], "Output",
+ CellChangeTimes->{
+  3.7132187245840125`*^9, {3.713218861546316*^9, 
+   3.7132188847483387`*^9}},ExpressionUUID->"402035ee-360d-43e1-90ac-\
+760504cdb57b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"fibonacci", "[", "2", "]"}], "=", "1"}]], "Input",
+ CellChangeTimes->{{3.713218694223797*^9, 3.7132186970799055`*^9}, {
+  3.7132187288765125`*^9, 
+  3.713218754224122*^9}},ExpressionUUID->"215a16a1-64ed-406b-8b05-\
+d85280e33670"],
+
+Cell[BoxData["1"], "Output",
+ CellChangeTimes->{3.7132187546078444`*^9, 
+  3.7132188637662835`*^9},ExpressionUUID->"af597766-5101-403b-8176-\
+a19a6bcb0141"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"fibonacci", "[", "n_", "]"}], " ", ":=", " ", 
+  RowBox[{
+   RowBox[{"fibonacci", "[", 
+    RowBox[{"n", "-", "1"}], "]"}], " ", "+", " ", 
+   RowBox[{"fibonacci", "[", 
+    RowBox[{"n", "-", "2"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.713218661860794*^9, 3.7132186662160687`*^9}, 
+   3.713218699194044*^9, {3.7132187578196898`*^9, 3.7132188172920465`*^9}, {
+   3.713218902156002*^9, 
+   3.7132189244188533`*^9}},ExpressionUUID->"2a3ced77-5a39-4765-9813-\
+88435639e2fb"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"fibonacci", "[", "3", "]"}]], "Input",
+ CellChangeTimes->{{3.71321881981136*^9, 
+  3.7132188383636875`*^9}},ExpressionUUID->"e9871950-0a02-4ea4-ac6c-\
+9d21a256f44b"],
+
+Cell[BoxData["2"], "Output",
+ CellChangeTimes->{{3.713218825222088*^9, 
+  3.7132189264338727`*^9}},ExpressionUUID->"003c5359-3223-41af-a244-\
+0039cdfbcd01"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"fibonacci", "[", "10", "]"}]], "Input",
+ CellChangeTimes->{{3.713218929338541*^9, 
+  3.713218933811982*^9}},ExpressionUUID->"f659456e-4ba0-4405-8ce7-\
+82fbdf46404b"],
+
+Cell[BoxData["55"], "Output",
+ CellChangeTimes->{
+  3.713218934217232*^9},ExpressionUUID->"2e72ef36-ce8b-42f5-b1ce-\
+ba76b1e12ba3"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7132187692032504`*^9, 
+  3.713218772162672*^9}},ExpressionUUID->"3a3d6313-3cf8-4b74-b65a-\
+e19df922cfe1"],
+
+Cell[TextData[{
+ "To demonstrate that your function works correctly, use ",
+ StyleBox["Table",
+  FontFamily->"Courier",
+  FontSize->13,
+  FontWeight->"Bold"],
+ " to generate a list of the first 10 Fibonacci numbers."
+}], "ItemNumbered",
+ CellChangeTimes->{{3.617797461611758*^9, 3.617797629207663*^9}, {
+  3.61779766705835*^9, 3.61779776337106*^9}, {3.617797799166296*^9, 
+  3.6177978201812363`*^9}},ExpressionUUID->"958aab75-d599-4929-bc4d-\
+32a2d90aa94e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Table", "[", 
+  RowBox[{
+   RowBox[{"fibonacci", "[", "i", "]"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", "10"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7132189552819505`*^9, 3.713218960780384*^9}, {
+  3.7132190612682395`*^9, 3.713219092220007*^9}, {3.713219200548828*^9, 
+  3.7132192380076156`*^9}},ExpressionUUID->"220165ab-75f7-40e6-904f-\
+f7c3fc669a4d"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "1", ",", "2", ",", "3", ",", "5", ",", "8", ",", "13", ",", "21",
+    ",", "34", ",", "55"}], "}"}]], "Output",
+ CellChangeTimes->{{3.7132190639279356`*^9, 3.713219092761227*^9}, 
+   3.713219208384244*^9, 
+   3.7132192385076003`*^9},ExpressionUUID->"a7d0af48-4330-434d-b1db-\
+55cac44804b3"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1008, 856},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+Magnification->1.25,
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Info33713200598-5511807"->{
+  Cell[3787, 112, 498, 13, 
+  52, "Print", "ExpressionUUID" -> "b53b1efa-9181-484d-9686-44ae4edf9f9e",
+   CellTags->"Info33713200598-5511807"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Info33713200598-5511807", 13041, 401}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 175, 3, 128, "Title", "ExpressionUUID" -> \
+"fb0cb723-c604-47ae-9837-46f59b2dfbe8"],
+Cell[758, 27, 158, 3, 70, "Subtitle", "ExpressionUUID" -> \
+"0bdc2dea-fbc4-4f00-87a3-ef9baad38be1"],
+Cell[919, 32, 664, 13, 115, "Text", "ExpressionUUID" -> \
+"52325db6-cd40-427f-b8d1-0842f4a4a4ad"],
+Cell[1586, 47, 297, 9, 38, "Input", "ExpressionUUID" -> \
+"a932436c-8ecd-4561-bc27-e1135a11dedd"],
+Cell[1886, 58, 709, 14, 115, "Text", "ExpressionUUID" -> \
+"5ca3610b-1429-49cb-ba53-e45b44b56474"],
+Cell[CellGroupData[{
+Cell[2620, 76, 234, 5, 38, "Input", "ExpressionUUID" -> \
+"cf66e0d4-cb93-4ea8-9523-4ec51e451558"],
+Cell[2857, 83, 166, 4, 38, "Output", "ExpressionUUID" -> \
+"5387487e-4564-44d0-8f8b-281759420329"]
+}, Open  ]],
+Cell[3038, 90, 533, 12, 90, "Text", "ExpressionUUID" -> \
+"44c04ff4-cb4f-4cdd-8d62-3b0779c40c6b"],
+Cell[CellGroupData[{
+Cell[3596, 106, 188, 4, 38, "Input", "ExpressionUUID" -> \
+"041f1a61-f09c-4421-9e9d-31cc54c3a7f4"],
+Cell[3787, 112, 498, 13, 52, "Print", "ExpressionUUID" -> \
+"b53b1efa-9181-484d-9686-44ae4edf9f9e",
+ CellTags->"Info33713200598-5511807"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4322, 130, 160, 3, 70, "Subtitle", "ExpressionUUID" -> \
+"51b49d27-7249-45c4-9f4e-70213b4e2c1a"],
+Cell[4485, 135, 467, 15, 66, "Text", "ExpressionUUID" -> \
+"23b3b42a-d4b1-46ed-9349-169f5660db7f"],
+Cell[CellGroupData[{
+Cell[4977, 154, 261, 6, 38, "Input", "ExpressionUUID" -> \
+"1cac55d1-1da2-4fb5-8e87-feea613cfd24"],
+Cell[5241, 162, 130, 3, 38, "Output", "ExpressionUUID" -> \
+"252a64a1-b299-44ad-a21b-57c21329321f"]
+}, Open  ]],
+Cell[5386, 168, 339, 7, 64, "Text", "ExpressionUUID" -> \
+"9d9a4a24-9444-4ca2-ae10-e147a322a0d2"],
+Cell[CellGroupData[{
+Cell[5750, 179, 116, 1, 38, "Input", "ExpressionUUID" -> \
+"6e6bd43a-1010-4138-b844-5e71abc29430"],
+Cell[5869, 182, 130, 3, 38, "Output", "ExpressionUUID" -> \
+"dc24e561-8146-4a02-a23f-02d9d0f20d32"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6036, 190, 224, 6, 38, "Input", "ExpressionUUID" -> \
+"e2606fed-be86-4cf5-836e-f6b3570ef224"],
+Cell[6263, 198, 272, 7, 38, "Output", "ExpressionUUID" -> \
+"29a66ea4-2c36-4e3c-9739-142b708b1b46"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6584, 211, 222, 4, 70, "Subtitle", "ExpressionUUID" -> \
+"3cbe547d-b931-4857-aa69-af866f11d2cb"],
+Cell[6809, 217, 454, 8, 89, "Text", "ExpressionUUID" -> \
+"d986df2b-57e6-4268-9dd8-806e0d62280e"],
+Cell[CellGroupData[{
+Cell[7288, 229, 631, 9, 37, "Subsubsubsection", "ExpressionUUID" -> \
+"7acd716e-605a-4fd5-94e0-c90d529cd4c9"],
+Cell[7922, 240, 1098, 28, 156, "ItemNumbered", "ExpressionUUID" -> \
+"8552d6f1-7c60-43af-a244-69d30145e7ab"],
+Cell[CellGroupData[{
+Cell[9045, 272, 300, 6, 38, "Input", "ExpressionUUID" -> \
+"0bc1054f-62b3-4779-b2fd-0bd0880d1b57"],
+Cell[9348, 280, 184, 4, 38, "Output", "ExpressionUUID" -> \
+"402035ee-360d-43e1-90ac-760504cdb57b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9569, 289, 264, 6, 38, "Input", "ExpressionUUID" -> \
+"215a16a1-64ed-406b-8b05-d85280e33670"],
+Cell[9836, 297, 156, 3, 38, "Output", "ExpressionUUID" -> \
+"af597766-5101-403b-8176-a19a6bcb0141"]
+}, Open  ]],
+Cell[10007, 303, 511, 12, 38, "Input", "ExpressionUUID" -> \
+"2a3ced77-5a39-4765-9813-88435639e2fb"],
+Cell[CellGroupData[{
+Cell[10543, 319, 189, 4, 38, "Input", "ExpressionUUID" -> \
+"e9871950-0a02-4ea4-ac6c-9d21a256f44b"],
+Cell[10735, 325, 156, 3, 38, "Output", "ExpressionUUID" -> \
+"003c5359-3223-41af-a244-0039cdfbcd01"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10928, 333, 189, 4, 38, "Input", "ExpressionUUID" -> \
+"f659456e-4ba0-4405-8ce7-82fbdf46404b"],
+Cell[11120, 339, 131, 3, 38, "Output", "ExpressionUUID" -> \
+"2e72ef36-ce8b-42f5-b1ce-ba76b1e12ba3"]
+}, Open  ]],
+Cell[11266, 345, 154, 3, 38, "Input", "ExpressionUUID" -> \
+"3a3d6313-3cf8-4b74-b65a-e19df922cfe1"],
+Cell[11423, 350, 457, 11, 62, "ItemNumbered", "ExpressionUUID" -> \
+"958aab75-d599-4929-bc4d-32a2d90aa94e"],
+Cell[CellGroupData[{
+Cell[11905, 365, 410, 9, 38, "Input", "ExpressionUUID" -> \
+"220165ab-75f7-40e6-904f-f7c3fc669a4d"],
+Cell[12318, 376, 343, 8, 71, "Output", "ExpressionUUID" -> \
+"a7d0af48-4330-434d-b1db-55cac44804b3"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

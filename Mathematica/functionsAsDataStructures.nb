@@ -1,0 +1,926 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     32594,        918]
+NotebookOptionsPosition[     24369,        717]
+NotebookOutlinePosition[     24734,        733]
+CellTagsIndexPosition[     24691,        730]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Functions as data structures", "Title",
+ CellChangeTimes->{{3.617808087424573*^9, 3.61780809969322*^9}}],
+
+Cell["\<\
+[Reminder: Evaluate all input cells as you read.]
+
+Because you can define a function\[CloseCurlyQuote]s value on individual \
+inputs, you can use a function as a data structure.\
+\>", "Text",
+ CellChangeTimes->{{3.6178081206149683`*^9, 3.6178081463565083`*^9}, {
+  3.648745158869039*^9, 
+  3.648745176244396*^9}},ExpressionUUID->"3ca07304-79d3-4f7f-bc33-\
+b4fcf2c8c5ea"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"book1", "[", "\"\<Title\>\"", "]"}], "=", 
+  "\"\<The Crying of Lot 49\>\""}]], "Input",
+ CellChangeTimes->{{3.617808170898961*^9, 
+  3.617808205091257*^9}},ExpressionUUID->"b89bb98c-2169-417c-a65a-\
+0bb4db7e6c1e"],
+
+Cell[BoxData["\<\"The Crying of Lot 49\"\>"], "Output",
+ CellChangeTimes->{
+  3.713215540673193*^9},ExpressionUUID->"0f206457-1885-42cb-b038-\
+981d52fab5d3"]
+}, Open  ]],
+
+Cell["\<\
+Here we have defined the value of the function book1 applied to the string \
+\[OpenCurlyDoubleQuote]Title\[CloseCurlyDoubleQuote] to be the string \
+\[OpenCurlyDoubleQuote]The Crying of Lot 49\[CloseCurlyDoubleQuote]. We can \
+also add other values. For example,\
+\>", "Text",
+ CellChangeTimes->{{3.617808221557406*^9, 3.617808272600778*^9}, {
+  3.6178083037358513`*^9, 
+  3.617808306727906*^9}},ExpressionUUID->"5a932aa8-e611-4177-a46f-\
+8011c3917e79"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"book1", "[", "\"\<Author\>\"", "]"}], "=", " ", 
+  "\"\<Thomas Pynchon\>\""}]], "Input",
+ CellChangeTimes->{{3.6178082140191393`*^9, 3.61780821871047*^9}, {
+  3.6178083107548532`*^9, 
+  3.6178083203361597`*^9}},ExpressionUUID->"ae3ffca6-9d58-4965-bfff-\
+d4081cae8feb"],
+
+Cell[BoxData["\<\"Thomas Pynchon\"\>"], "Output",
+ CellChangeTimes->{
+  3.71321555723752*^9},ExpressionUUID->"f3aa239d-11c6-4b84-b072-7d80afc365da"]
+}, Open  ]],
+
+Cell["\<\
+Call the function on a string on which the function\[CloseCurlyQuote]s value \
+was defined returns the corresponding value:\
+\>", "Text",
+ CellChangeTimes->{{3.617808331968083*^9, 3.617808355934607*^9}, {
+  3.6487452098688707`*^9, 3.648745222277673*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"book1", "[", "\"\<Title\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.6178083587412167`*^9, 
+  3.6178083801002827`*^9}},ExpressionUUID->"2a21e504-56d7-4403-977d-\
+fdeb8d8e6142"],
+
+Cell[BoxData["\<\"The Crying of Lot 49\"\>"], "Output",
+ CellChangeTimes->{
+  3.713215559350853*^9},ExpressionUUID->"d24d837f-0b62-4447-bad3-\
+4b0192833240"]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["book1",
+  FontFamily->"Courier"],
+ " is an arbitrary symbol being used as the name of a function. You could \
+have used ",
+ StyleBox["asdf",
+  FontFamily->"Courier"],
+ " instead."
+}], "Text",
+ CellChangeTimes->{{3.648745246669689*^9, 3.648745284832971*^9}}],
+
+Cell["\<\
+If you apply a function to an argument on which it has not been defined then \
+there is no further evaluation that can be done so you just get back what you \
+put in.\
+\>", "Text",
+ CellChangeTimes->{{3.617808383999489*^9, 3.6178084877871323`*^9}, {
+  3.648745363640582*^9, 3.648745379912994*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"book1", "[", "\"\<Publisher\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.6178084684670897`*^9, 
+  3.61780848147618*^9}},ExpressionUUID->"12f6e5ed-b26c-486d-a377-\
+21abb9bce589"],
+
+Cell[BoxData[
+ RowBox[{"book1", "[", "\<\"Publisher\"\>", "]"}]], "Output",
+ CellChangeTimes->{
+  3.7132155701800013`*^9},ExpressionUUID->"e50418f1-04a2-4bf3-9475-\
+b804d7fd9794"]
+}, Open  ]],
+
+Cell["\<\
+Functions that define other functions can be used as constructors.\
+\>", "Text",
+ CellChangeTimes->{{3.617809217054647*^9, 3.6178092329822197`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"makeBook", "[", " ", 
+   RowBox[{"title_", ",", " ", "author_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"book", "[", " ", "\"\<Title\>\"", "]"}], ":=", "title"}], ";", 
+    " ", 
+    RowBox[{
+     RowBox[{"book", "[", " ", "\"\<Author\>\"", "]"}], ":=", "author"}], 
+    ";"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.61780863044477*^9, 3.617808731320738*^9}, {
+  3.617808782595931*^9, 3.617808881878039*^9}, {3.7132169908295746`*^9, 
+  3.7132169943894506`*^9}},ExpressionUUID->"ea60031d-04f1-4a0a-83d9-\
+779ed72db267"],
+
+Cell["\<\
+This constructor function takes a different tack, defining the function book \
+on two arguments, the first of which serves as a book identifier and the \
+second a string indicating what information about the book you are interested \
+in, such as the title or author. Here is how you use it.\
+\>", "Text",
+ CellChangeTimes->{{3.648745425059904*^9, 3.648745575184741*^9}}],
+
+Cell[BoxData[
+ RowBox[{"makeBook", "[", " ", 
+  RowBox[{
+  "\"\<I Know Why the Caged Bird Sings\>\"", ",", " ", 
+   "\"\<Maya Angelou\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.617808888607519*^9, 3.617808919424148*^9}, {
+  3.71321699902899*^9, 
+  3.713216999408247*^9}},ExpressionUUID->"7dc4bf7a-a734-41c1-b917-\
+fc89b8f55bf9"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"book", "[", " ", "\"\<Title\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.617808932088772*^9, 3.6178089422229357`*^9}, 
+   3.7132170032982903`*^9},ExpressionUUID->"10dbd521-696d-473c-866b-\
+637bbd74d255"],
+
+Cell[BoxData["\<\"I Know Why the Caged Bird Sings\"\>"], "Output",
+ CellChangeTimes->{
+  3.7132157473180437`*^9, {3.7132170044687805`*^9, 
+   3.713217005854211*^9}},ExpressionUUID->"7ed19d85-9727-447b-9eb3-\
+b3b20f40fb76"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"book", "[", "\"\<Author\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.617808932088772*^9, 3.6178089422229357`*^9}, {
+   3.617808981044335*^9, 3.617808983094405*^9}, 
+   3.713217100752033*^9},ExpressionUUID->"81dc4b4d-e286-4b81-bb88-\
+251eed970920"],
+
+Cell[BoxData["\<\"Maya Angelou\"\>"], "Output",
+ CellChangeTimes->{
+  3.713215754822502*^9, {3.7132170973982916`*^9, 
+   3.7132171033799973`*^9}},ExpressionUUID->"d2352b94-b0a8-42e1-8d51-\
+ec82e56a016b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"book", "[", 
+  RowBox[{"3", ",", " ", "\"\<Title\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.617808984973083*^9, 
+  3.617808996005913*^9}},ExpressionUUID->"2541d23c-cbd4-4976-afb4-\
+06036fa99a76"],
+
+Cell[BoxData[
+ RowBox[{"book", "[", 
+  RowBox[{"3", ",", "\<\"Title\"\>"}], "]"}]], "Output",
+ CellChangeTimes->{
+  3.713215757791847*^9},ExpressionUUID->"3885044c-17bb-4a36-931b-\
+055c81c50a06"]
+}, Open  ]],
+
+Cell[TextData[{
+ "The last example doesn\[CloseCurlyQuote]t evaluate because the function ",
+ StyleBox["book",
+  FontFamily->"Courier"],
+ " has not been defined on the exact argument pair consisting of the number 3 \
+and the string \[OpenCurlyDoubleQuote]Title\[CloseCurlyDoubleQuote]."
+}], "Text",
+ CellChangeTimes->{{3.648745586958434*^9, 3.648745630646111*^9}}],
+
+Cell[TextData[{
+ "Functions can be ",
+ StyleBox["overloaded",
+  FontSlant->"Italic"],
+ ", meaning that they have multiple definitions that are disambiguated by the \
+number and type of arguments supplied. In ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ ", definitions made with more specific arguments take precedence over those \
+made with more general arguments. Using this principle, we can define default \
+cases that handle requests for unknown information:"
+}], "Text",
+ CellChangeTimes->{{3.6178085116382647`*^9, 3.6178086230874023`*^9}, {
+  3.6178092867027197`*^9, 3.6178093728988543`*^9}, {3.617809407098632*^9, 
+  3.617809411081808*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"book", "[", 
+   RowBox[{"n_", ",", " ", "\"\<Author\>\""}], "]"}], ":=", 
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<No author defined for book \>\"", ",", " ", "n"}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.617809105863309*^9, 
+  3.617809137802401*^9}},ExpressionUUID->"c1af9b8e-ea1b-4939-8e02-\
+240d896d61bd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"book", "[", 
+   RowBox[{"n_", ",", " ", "\"\<Title\>\""}], "]"}], ":=", 
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<No title defined for book \>\"", ",", " ", "n"}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.617809155207901*^9, 
+  3.6178091645215673`*^9}},ExpressionUUID->"3ad8e9e4-31e8-477d-a097-\
+3931af2fc462"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"book", "[", 
+  RowBox[{"2", ",", " ", "\"\<Title\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.617809170212446*^9, 
+  3.617809182521145*^9}},ExpressionUUID->"e72aa90a-5ec0-4390-8f1e-\
+85b6beae9b75"],
+
+Cell[BoxData["\<\"I Know Why the Caged Bird Sings\"\>"], "Output",
+ CellChangeTimes->{
+  3.7132157777651854`*^9},ExpressionUUID->"27faf7a4-e116-4612-9307-\
+7117c0398670"]
+}, Open  ]],
+
+Cell["\<\
+This works as before because we used a specific number, 2, in a definition of \
+the function book: When applied to 2 and \[OpenCurlyDoubleQuote]Title\
+\[CloseCurlyDoubleQuote] it produces a defined value.\
+\>", "Text",
+ CellChangeTimes->{{3.617809393497645*^9, 3.617809464463945*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"book", "[", 
+  RowBox[{"3", ",", " ", "\"\<Title\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.6178091848911743`*^9, 
+  3.6178091904325438`*^9}},ExpressionUUID->"842e9571-dffb-4b10-b6e6-\
+7514219156e6"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"No title defined for book \"\>", "\[InvisibleSpace]", "3"}],
+  SequenceForm["No title defined for book ", 3],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.7132157829239335`*^9},ExpressionUUID->"0ebb5a21-282b-4a2f-971b-\
+15b03f4354a8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"book", "[", "3", "]"}]], "Input",
+ CellChangeTimes->{{3.7132162384470067`*^9, 
+  3.7132162399475145`*^9}},ExpressionUUID->"39720729-c04b-42ec-8f59-\
+e1ca02aad2f0"],
+
+Cell[BoxData[
+ RowBox[{"book", "[", "3", "]"}]], "Output",
+ CellChangeTimes->{
+  3.7132162407747707`*^9},ExpressionUUID->"61c45d40-26ec-4a12-9e63-\
+14d200b37dab"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Because there was no specific definition for ",
+ StyleBox["book[3, \[OpenCurlyDoubleQuote]Title\[CloseCurlyDoubleQuote]]",
+  FontFamily->"Courier",
+  FontWeight->"Bold"],
+ " the more general definition for ",
+ StyleBox["book[n_, \[OpenCurlyDoubleQuote]Title\[CloseCurlyDoubleQuote]]",
+  FontFamily->"Courier",
+  FontWeight->"Bold"],
+ " is applied."
+}], "Text",
+ CellChangeTimes->{{3.617809476601182*^9, 
+  3.617809527645891*^9}},ExpressionUUID->"c058adc1-e771-4673-8a1f-\
+3a85077c6c88"],
+
+Cell["\<\
+In general, looking up the definition of a function is fast (it is \
+implemented as a hash table), so you can use this as a way of storing data \
+without excessive slowdown. It should be constant time, regardless of the \
+number of values stored, and therefore faster than scanning a long list.\
+\>", "Text",
+ CellChangeTimes->{{3.6178095828360977`*^9, 3.6178097287769537`*^9}, 
+   3.681219595194688*^9}],
+
+Cell[CellGroupData[{
+
+Cell["Practice: Using functions as data structures", "Subsubsubsection",
+ CellChangeTimes->{{3.583175578135281*^9, 3.583175585252611*^9}, {
+  3.583237215724431*^9, 3.583237230152749*^9}, {3.583237385305098*^9, 
+  3.583237408360573*^9}, {3.583350266707965*^9, 3.5833502680112123`*^9}, {
+  3.58342604161637*^9, 3.58342604629023*^9}, {3.583498856500457*^9, 
+  3.5834988629059267`*^9}, {3.583505142291054*^9, 3.5835051472415533`*^9}, {
+  3.583512441172587*^9, 3.5835124550655746`*^9}, {3.583514468298832*^9, 
+  3.583514469463975*^9}, {3.61779736428045*^9, 3.6177973689104767`*^9}, {
+  3.6178099004755383`*^9, 3.617809908275565*^9}}],
+
+Cell["\<\
+Implement a data structure that maps student IDs to student names and store \
+your own ID and name in it. Define a default message for IDs that have not \
+been stored. Demonstrate that they work.\
+\>", "ItemNumbered",
+ CellChangeTimes->{{3.617809956915505*^9, 3.617809965149622*^9}, {
+  3.617810005440543*^9, 3.617810085062583*^9}, {3.617810766597416*^9, 
+  3.617810766605731*^9}, {3.6178108621611032`*^9, 3.61781086847331*^9}, {
+  3.617811031087719*^9, 
+  3.617811031091896*^9}},ExpressionUUID->"3f5d5527-4ef9-4331-83f6-\
+7d00dc6f61ce"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"studentMap", " ", "[", 
+   RowBox[{"studentID_", ",", " ", "studentName_"}], "]"}], " ", ":=", " ", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"student", "[", 
+      RowBox[{"studentID", ",", " ", "\"\<Name\>\""}], "]"}], " ", ":=", " ", 
+     "studentName"}], ";"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.7132158207397118`*^9, 3.7132159713266535`*^9}, 
+   3.713217969460145*^9},ExpressionUUID->"fb78d0cb-4d17-4ea4-9cb5-\
+f7445455f669"],
+
+Cell[BoxData[
+ RowBox[{"studentMap", " ", "[", 
+  RowBox[{"436678", ",", " ", "\"\<Liam Joyce\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.713215996703598*^9, 
+  3.7132160097803645`*^9}},ExpressionUUID->"9739f825-9dd7-439b-98d1-\
+a0855d93e2e2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"student", " ", "[", 
+  RowBox[{"436678", ",", " ", "\"\<Name\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.7132160251968637`*^9, 
+  3.713216061584325*^9}},ExpressionUUID->"1c32f657-a434-416a-9dd8-\
+5ad9f7b7af16"],
+
+Cell[BoxData["\<\"Liam Joyce\"\>"], "Output",
+ CellChangeTimes->{3.713216064207247*^9, 3.7132161956968803`*^9, 
+  3.7132179745185146`*^9},ExpressionUUID->"2ae37676-b846-412d-b911-\
+9e2e51e6c252"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"student", "[", 
+   RowBox[{"studentID_", ",", " ", "\"\<Name\>\""}], "]"}], " ", ":=", " ", 
+  RowBox[{"Print", "[", "\"\<A student has no name.\>\"", "]"}]}]], "Input",
+ CellChangeTimes->{{3.7132160791702785`*^9, 
+  3.7132161530853095`*^9}},ExpressionUUID->"074db5e3-5447-4a60-bbcd-\
+2b329cab81d5"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"student", "[", 
+  RowBox[{"1234", ",", " ", "\"\<Name\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.713216215925384*^9, 
+  3.7132162214399977`*^9}},ExpressionUUID->"15a9db56-1ee0-4dfe-bb75-\
+69c36f9b4778"],
+
+Cell[BoxData["\<\"A student has no name.\"\>"], "Print",
+ CellChangeTimes->{3.713216221939929*^9, 
+  3.7132179780394926`*^9},ExpressionUUID->"3851bb16-1b8a-4ced-849d-\
+e2945af41549"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"student", "[", 
+   RowBox[{"\"\<studentID\>\"", ",", " ", "studentName_"}], "]"}], " ", ":=", 
+  "  ", 
+  RowBox[{"Print", "[", " ", 
+   RowBox[{"studentName", ",", "\"\< has no ID. Shameful!\>\""}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.7132166772974796`*^9, 
+  3.713216744562147*^9}},ExpressionUUID->"17551032-9b05-45a4-9d86-\
+d4872d58351b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"student", "[", 
+  RowBox[{"\"\<studentID\>\"", ",", " ", "tedCruz"}], "]"}]], "Input",
+ CellChangeTimes->{{3.713216713876648*^9, 
+  3.713216758308326*^9}},ExpressionUUID->"b76310ee-1e85-4eb3-ac60-\
+b633667da117"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"tedCruz", "\[InvisibleSpace]", "\<\" has no ID. Shameful!\"\>"}],
+  SequenceForm[$CellContext`tedCruz, " has no ID. Shameful!"],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.713216758698285*^9, 
+  3.7132179817196226`*^9},ExpressionUUID->"8aed42a0-bdde-4031-8c58-\
+3118d334ca46"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"student", "[", 
+  RowBox[{"\"\<studentID\>\"", ",", " ", "\"\<studentName\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.7132167812312984`*^9, 
+  3.7132167891559114`*^9}},ExpressionUUID->"04e87ea0-68c1-43f4-83b7-\
+802d9e4c2fc7"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"studentName\"\>", 
+   "\[InvisibleSpace]", "\<\" has no ID. Shameful!\"\>"}],
+  SequenceForm["studentName", " has no ID. Shameful!"],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.7132167896814327`*^9},ExpressionUUID->"e8e973b2-23d0-448e-a264-\
+ba66a3d6f897"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"student", "[", 
+   RowBox[{"\"\<studentID\>\"", ",", " ", "\"\<studentName\>\""}], "]"}], " ",
+   ":=", " ", 
+  RowBox[{
+  "Print", "[", "\"\<Seriously? You input NOTHING!\>\"", "]"}]}]], "Input",
+ CellChangeTimes->{{3.7132168149959307`*^9, 
+  3.713216838342841*^9}},ExpressionUUID->"31302af8-a731-4161-8eed-\
+426ae9dc148d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"student", "[", 
+  RowBox[{"\"\<studentID\>\"", ",", " ", "\"\<studentName\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.713216841356515*^9, 
+  3.7132168502799034`*^9}},ExpressionUUID->"05b4ad48-f10e-4c17-bba0-\
+53af10d71c2b"],
+
+Cell[BoxData["\<\"Seriously? You input NOTHING!\"\>"], "Print",
+ CellChangeTimes->{3.713216850639659*^9, 
+  3.7132179961639547`*^9},ExpressionUUID->"e012ad27-e69f-4f10-a584-\
+6a6865fcda62"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Implement a function ",
+ StyleBox["speciesName",
+  FontFamily->"Courier",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " that returns the formal species name when applied to the informal names \
+\[OpenCurlyDoubleQuote]yeast\[CloseCurlyDoubleQuote], \
+\[OpenCurlyDoubleQuote]fruit fly\[CloseCurlyDoubleQuote], \
+\[OpenCurlyDoubleQuote]worm\[CloseCurlyDoubleQuote], \
+\[OpenCurlyDoubleQuote]mouse\[CloseCurlyDoubleQuote], and \
+\[OpenCurlyDoubleQuote]human\[CloseCurlyDoubleQuote]. If you don\
+\[CloseCurlyQuote]t know the corresponding formal species names, look them up \
+-- it\[CloseCurlyQuote]s useful knowledge."
+}], "ItemNumbered",
+ CellChangeTimes->{{3.617809956915505*^9, 3.617809965149622*^9}, {
+  3.617810005440543*^9, 3.617810085062583*^9}, {3.617810766597416*^9, 
+  3.617810766605731*^9}, {3.6178108621611032`*^9, 3.61781086847331*^9}, {
+  3.617811031087719*^9, 
+  3.617811130337899*^9}},ExpressionUUID->"58f884b9-3ef3-43e1-8e38-\
+1d56e7bd832b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"speciesName", " ", "[", "  ", 
+   RowBox[{"commonName_", ",", " ", "scientificName_"}], "]"}], " ", ":=", 
+  " ", "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"species", "[", "commonName", "]"}], " ", ":=", " ", 
+     "scientificName"}], ";"}], ")"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"species", "[", "scientificName", "]"}], " ", "=", " ", 
+    "commonName"}], "*)"}]}]}], "Input",
+ CellChangeTimes->{{3.713216265445837*^9, 3.713216356821701*^9}, {
+   3.7132165525472665`*^9, 3.713216553226266*^9}, {3.7132169132173977`*^9, 
+   3.7132169178672476`*^9}, {3.713217017877969*^9, 3.713217063757649*^9}, {
+   3.7132172879186225`*^9, 3.713217290815106*^9}, {3.713217345481954*^9, 
+   3.713217347267346*^9}, 
+   3.713218004357036*^9},ExpressionUUID->"07eb529d-78b3-4015-bdde-\
+b10226770f31"],
+
+Cell[BoxData[
+ RowBox[{"speciesName", "[", 
+  RowBox[{"\"\<yeast\>\"", ",", " ", "\"\<S. cerevisiae\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.7132163640908327`*^9, 3.7132163692357197`*^9}, {
+  3.713216538840742*^9, 3.713216544537099*^9}, {3.7132168771361575`*^9, 
+  3.7132168787930202`*^9}, {3.713217028943412*^9, 
+  3.713217031119539*^9}},ExpressionUUID->"ca262bc3-5834-41c8-b6ac-\
+a766306b9b7a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"species", "[", "\"\<yeast\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.713216559489421*^9, 
+  3.7132165643768206`*^9}},ExpressionUUID->"0cf37e96-5a29-4c9e-a35c-\
+082979b823d2"],
+
+Cell[BoxData["\<\"S. cerevisiae\"\>"], "Output",
+ CellChangeTimes->{{3.7132165647589235`*^9, 3.7132165944867396`*^9}, 
+   3.713217034855977*^9, 3.713217306904539*^9, 
+   3.713218008495635*^9},ExpressionUUID->"41ad2871-710a-4e2a-b927-\
+dca1fbe1eb49"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"speciesName", "[", 
+    RowBox[{"\"\<fruit fly\>\"", ",", " ", "\"\<D. melanogaster\>\""}], "]"}],
+    ";"}], " "}]], "Input",
+ CellChangeTimes->{{3.7132171267735357`*^9, 3.7132172737199125`*^9}, 
+   3.7132173639322634`*^9, 
+   3.7132174315429983`*^9},ExpressionUUID->"49fac3f4-7d47-4a36-a723-\
+d557975befa3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"species", "[", "\"\<fruit fly\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.7132172499649496`*^9, 3.713217256512209*^9}, {
+  3.713217365889439*^9, 3.713217366609383*^9}, {3.713217451032598*^9, 
+  3.713217451601198*^9}},ExpressionUUID->"cc8869ce-51ef-4790-842e-\
+1b748d150abb"],
+
+Cell[BoxData["\<\"D. melanogaster\"\>"], "Output",
+ CellChangeTimes->{{3.7132172568437467`*^9, 3.7132172793556404`*^9}, {
+  3.7132173163549023`*^9, 3.71321731831771*^9}, {3.7132173551145887`*^9, 
+  3.7132173757952223`*^9}, {3.7132174372509403`*^9, 
+  3.713217452111146*^9}},ExpressionUUID->"c2d680db-254f-4f7d-830f-\
+dca921f8e7c2"]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"speciesName", "[", 
+    RowBox[{"\"\<worm\>\"", ",", " ", "\"\<L. terrestris\>\""}], "]"}], ";"}],
+   " "}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"speciesName", "[", 
+   RowBox[{"\"\<mouse\>\"", ",", " ", "\"\<M. musculus\>\""}], "]"}], ";", 
+  " ", 
+  RowBox[{"speciesName", "[", 
+   RowBox[{"\"\<human\>\"", ",", " ", "\"\<H. sapien\>\""}], "]"}], 
+  ";"}]}], "Input",ExpressionUUID->"10cdd433-f1df-469f-8e09-93c7b1363276"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"species", "[", "\"\<human\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.713217456784243*^9, 
+  3.7132174660097947`*^9}},ExpressionUUID->"0fb068e0-98a5-4b99-b551-\
+fdbe6d37125d"],
+
+Cell[BoxData["\<\"H. sapien\"\>"], "Output",
+ CellChangeTimes->{
+  3.71321746642939*^9},ExpressionUUID->"ad01e17c-2c49-49ad-973c-a336745f01a5"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Implement a function ",
+ StyleBox["registerStudent",
+  FontFamily->"Courier",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " that takes a name and an ID and defines ",
+ StyleBox["student",
+  FontFamily->"Courier",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " to be a function that returns the name when applied to the ID and the ID \
+when applied to the name. Demonstrate that it works."
+}], "ItemNumbered",
+ CellChangeTimes->{{3.617809956915505*^9, 3.617809965149622*^9}, {
+  3.617810005440543*^9, 3.617810085062583*^9}, {3.617810766597416*^9, 
+  3.617810874297073*^9}},ExpressionUUID->"7a2131d0-ef7e-4b36-a564-\
+9ececde613b4"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"registerStudent", " ", "[", 
+   RowBox[{"newStudentID_", ",", " ", "newStudentName_"}], "]"}], " ", ":=", 
+  " ", "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"student", "[", "newStudentID", "]"}], " ", ":=", " ", 
+     "newStudentName"}], ";", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"student", "[", "newStudentName", "]"}], " ", ":=", " ", 
+     "newStudentID"}], ";"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.7132174801433897`*^9, 3.713217566363453*^9}, {
+  3.7132177272984896`*^9, 3.7132178214331594`*^9}, {3.71321801362023*^9, 
+  3.713218015251676*^9}},ExpressionUUID->"eea19cd0-3351-42ed-b368-\
+88a4437dc2ec"],
+
+Cell[BoxData[
+ RowBox[{"registerStudent", "[", 
+  RowBox[{"123", ",", " ", "\"\<Dumbo Forgot to Register\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.7132178240420494`*^9, 3.713217842554778*^9}, {
+  3.713218032057199*^9, 
+  3.7132180727028723`*^9}},ExpressionUUID->"9775e2c1-941f-4362-bcb3-\
+fb725107f0b2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"student", "[", "123", "]"}]], "Input",
+ CellChangeTimes->{{3.7132178450334883`*^9, 3.713217847759684*^9}, {
+  3.713218074109542*^9, 
+  3.7132180760650597`*^9}},ExpressionUUID->"2742b909-f23c-4c51-9619-\
+ad40c74e79ab"],
+
+Cell[BoxData["\<\"Dumbo Forgot to Register\"\>"], "Output",
+ CellChangeTimes->{
+  3.713217848156996*^9, {3.713218019218814*^9, 
+   3.7132180793734956`*^9}},ExpressionUUID->"a22e1963-7c41-4ac4-a155-\
+4487e230a572"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"student", "[", "\"\<Dumbo Forgot to Register\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.713218060719143*^9, 
+  3.713218068892868*^9}},ExpressionUUID->"b5fd44d1-c85e-474e-80fc-\
+1b4d3c4d8332"],
+
+Cell[BoxData["123"], "Output",
+ CellChangeTimes->{{3.713218069288315*^9, 
+  3.71321808150895*^9}},ExpressionUUID->"55a58d9e-c0ff-46fc-a8d0-\
+42abee81f448"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1072, 841},
+WindowMargins->{{-16, Automatic}, {Automatic, 0}},
+Magnification->1.25,
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 110, 1, 128, "Title", "ExpressionUUID" -> \
+"43b4c963-c8cf-44c9-93fc-337d19b9f8e9"],
+Cell[693, 25, 380, 9, 89, "Text", "ExpressionUUID" -> \
+"3ca07304-79d3-4f7f-bc33-b4fcf2c8c5ea"],
+Cell[CellGroupData[{
+Cell[1098, 38, 249, 6, 38, "Input", "ExpressionUUID" -> \
+"b89bb98c-2169-417c-a65a-0bb4db7e6c1e"],
+Cell[1350, 46, 157, 3, 38, "Output", "ExpressionUUID" -> \
+"0f206457-1885-42cb-b038-981d52fab5d3"]
+}, Open  ]],
+Cell[1522, 52, 463, 9, 64, "Text", "ExpressionUUID" -> \
+"5a932aa8-e611-4177-a46f-8011c3917e79"],
+Cell[CellGroupData[{
+Cell[2010, 65, 303, 7, 38, "Input", "ExpressionUUID" -> \
+"ae3ffca6-9d58-4965-bfff-d4081cae8feb"],
+Cell[2316, 74, 148, 2, 38, "Output", "ExpressionUUID" -> \
+"f3aa239d-11c6-4b84-b072-7d80afc365da"]
+}, Open  ]],
+Cell[2479, 79, 264, 5, 39, "Text", "ExpressionUUID" -> \
+"a5cf41e4-287c-49c4-bfb9-d3e4f606adb6"],
+Cell[CellGroupData[{
+Cell[2768, 88, 200, 4, 38, "Input", "ExpressionUUID" -> \
+"2a21e504-56d7-4403-977d-fdeb8d8e6142"],
+Cell[2971, 94, 157, 3, 38, "Output", "ExpressionUUID" -> \
+"d24d837f-0b62-4447-bad3-4b0192833240"]
+}, Open  ]],
+Cell[3143, 100, 284, 9, 40, "Text", "ExpressionUUID" -> \
+"f453dca7-09b6-4a06-b5b3-0889064051e2"],
+Cell[3430, 111, 307, 6, 64, "Text", "ExpressionUUID" -> \
+"cbea2eca-e84d-4ff5-a793-9bdc7e6b875e"],
+Cell[CellGroupData[{
+Cell[3762, 121, 201, 4, 38, "Input", "ExpressionUUID" -> \
+"12f6e5ed-b26c-486d-a377-21abb9bce589"],
+Cell[3966, 127, 179, 4, 38, "Output", "ExpressionUUID" -> \
+"e50418f1-04a2-4bf3-9475-b804d7fd9794"]
+}, Open  ]],
+Cell[4160, 134, 158, 3, 39, "Text", "ExpressionUUID" -> \
+"60ba36a6-0a7d-46fb-8b63-14f28ca369df"],
+Cell[4321, 139, 611, 16, 63, "Input", "ExpressionUUID" -> \
+"ea60031d-04f1-4a0a-83d9-779ed72db267"],
+Cell[4935, 157, 380, 6, 89, "Text", "ExpressionUUID" -> \
+"d4898788-5f3d-4e14-a700-c41f8f106290"],
+Cell[5318, 165, 332, 8, 38, "Input", "ExpressionUUID" -> \
+"7dc4bf7a-a734-41c1-b917-fc89b8f55bf9"],
+Cell[CellGroupData[{
+Cell[5675, 177, 227, 4, 38, "Input", "ExpressionUUID" -> \
+"10dbd521-696d-473c-866b-637bbd74d255"],
+Cell[5905, 183, 222, 4, 38, "Output", "ExpressionUUID" -> \
+"7ed19d85-9727-447b-9eb3-b3b20f40fb76"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6164, 192, 271, 5, 38, "Input", "ExpressionUUID" -> \
+"81dc4b4d-e286-4b81-bb88-251eed970920"],
+Cell[6438, 199, 203, 4, 38, "Output", "ExpressionUUID" -> \
+"d2352b94-b0a8-42e1-8d51-ec82e56a016b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6678, 208, 223, 5, 38, "Input", "ExpressionUUID" -> \
+"2541d23c-cbd4-4976-afb4-06036fa99a76"],
+Cell[6904, 215, 195, 5, 38, "Output", "ExpressionUUID" -> \
+"3885044c-17bb-4a36-931b-055c81c50a06"]
+}, Open  ]],
+Cell[7114, 223, 364, 7, 65, "Text", "ExpressionUUID" -> \
+"f6ace45b-0e0c-47c2-8d06-ed5c4e7e8b7e"],
+Cell[7481, 232, 655, 14, 116, "Text", "ExpressionUUID" -> \
+"d7b61eae-523f-4e53-a141-59467f0c2943"],
+Cell[8139, 248, 349, 9, 38, "Input", "ExpressionUUID" -> \
+"c1af9b8e-ea1b-4939-8e02-240d896d61bd"],
+Cell[8491, 259, 349, 9, 38, "Input", "ExpressionUUID" -> \
+"3ad8e9e4-31e8-477d-a097-3931af2fc462"],
+Cell[CellGroupData[{
+Cell[8865, 272, 223, 5, 38, "Input", "ExpressionUUID" -> \
+"e72aa90a-5ec0-4390-8f1e-85b6beae9b75"],
+Cell[9091, 279, 170, 3, 38, "Output", "ExpressionUUID" -> \
+"27faf7a4-e116-4612-9307-7117c0398670"]
+}, Open  ]],
+Cell[9276, 285, 294, 5, 64, "Text", "ExpressionUUID" -> \
+"9fea989d-3a66-48a5-b88e-c380c6dc5b22"],
+Cell[CellGroupData[{
+Cell[9595, 294, 227, 5, 38, "Input", "ExpressionUUID" -> \
+"842e9571-dffb-4b10-b6e6-7514219156e6"],
+Cell[9825, 301, 292, 7, 28, "Print", "ExpressionUUID" -> \
+"0ebb5a21-282b-4a2f-971b-15b03f4354a8"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10154, 313, 187, 4, 38, "Input", "ExpressionUUID" -> \
+"39720729-c04b-42ec-8f59-e1ca02aad2f0"],
+Cell[10344, 319, 162, 4, 38, "Output", "ExpressionUUID" -> \
+"61c45d40-26ec-4a12-9e63-14d200b37dab"]
+}, Open  ]],
+Cell[10521, 326, 504, 13, 66, "Text", "ExpressionUUID" -> \
+"c058adc1-e771-4673-8a1f-3a85077c6c88"],
+Cell[11028, 341, 414, 7, 89, "Text", "ExpressionUUID" -> \
+"5b478ee1-cd43-4097-aa35-a494d5fecd12"],
+Cell[CellGroupData[{
+Cell[11467, 352, 628, 8, 37, "Subsubsubsection", "ExpressionUUID" -> \
+"0cbaa41e-1778-4980-a01e-6e1a25d0d08c"],
+Cell[12098, 362, 547, 10, 61, "ItemNumbered", "ExpressionUUID" -> \
+"3f5d5527-4ef9-4331-83f6-7d00dc6f61ce"],
+Cell[12648, 374, 512, 13, 63, "Input", "ExpressionUUID" -> \
+"fb78d0cb-4d17-4ea4-9cb5-f7445455f669"],
+Cell[13163, 389, 246, 5, 38, "Input", "ExpressionUUID" -> \
+"9739f825-9dd7-439b-98d1-a0855d93e2e2"],
+Cell[CellGroupData[{
+Cell[13434, 398, 237, 5, 38, "Input", "ExpressionUUID" -> \
+"1c32f657-a434-416a-9dd8-5ad9f7b7af16"],
+Cell[13674, 405, 195, 3, 38, "Output", "ExpressionUUID" -> \
+"2ae37676-b846-412d-b911-9e2e51e6c252"]
+}, Open  ]],
+Cell[13884, 411, 334, 7, 38, "Input", "ExpressionUUID" -> \
+"074db5e3-5447-4a60-bbcd-2b329cab81d5"],
+Cell[CellGroupData[{
+Cell[14243, 422, 230, 5, 38, "Input", "ExpressionUUID" -> \
+"15a9db56-1ee0-4dfe-bb75-69c36f9b4778"],
+Cell[14476, 429, 182, 3, 28, "Print", "ExpressionUUID" -> \
+"3851bb16-1b8a-4ced-849d-e2945af41549"]
+}, Open  ]],
+Cell[14673, 435, 385, 10, 38, "Input", "ExpressionUUID" -> \
+"17551032-9b05-45a4-9d86-d4872d58351b"],
+Cell[CellGroupData[{
+Cell[15083, 449, 236, 5, 38, "Input", "ExpressionUUID" -> \
+"b76310ee-1e85-4eb3-ac60-b633667da117"],
+Cell[15322, 456, 329, 7, 28, "Print", "ExpressionUUID" -> \
+"8aed42a0-bdde-4031-8c58-3118d334ca46"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15688, 468, 255, 6, 38, "Input", "ExpressionUUID" -> \
+"04e87ea0-68c1-43f4-83b7-802d9e4c2fc7"],
+Cell[15946, 476, 316, 8, 28, "Print", "ExpressionUUID" -> \
+"e8e973b2-23d0-448e-a264-ba66a3d6f897"]
+}, Open  ]],
+Cell[16277, 487, 359, 9, 38, "Input", "ExpressionUUID" -> \
+"31302af8-a731-4161-8eed-426ae9dc148d"],
+Cell[CellGroupData[{
+Cell[16661, 500, 253, 6, 38, "Input", "ExpressionUUID" -> \
+"05b4ad48-f10e-4c17-bba0-53af10d71c2b"],
+Cell[16917, 508, 189, 3, 28, "Print", "ExpressionUUID" -> \
+"e012ad27-e69f-4f10-a584-6a6865fcda62"]
+}, Open  ]],
+Cell[17121, 514, 968, 20, 85, "ItemNumbered", "ExpressionUUID" -> \
+"58f884b9-3ef3-43e1-8e38-1d56e7bd832b"],
+Cell[18092, 536, 898, 21, 87, "Input", "ExpressionUUID" -> \
+"07eb529d-78b3-4015-bdde-b10226770f31"],
+Cell[18993, 559, 405, 8, 38, "Input", "ExpressionUUID" -> \
+"ca262bc3-5834-41c8-b6ac-a766306b9b7a"],
+Cell[CellGroupData[{
+Cell[19423, 571, 200, 4, 38, "Input", "ExpressionUUID" -> \
+"0cf37e96-5a29-4c9e-a35c-082979b823d2"],
+Cell[19626, 577, 249, 4, 38, "Output", "ExpressionUUID" -> \
+"41ad2871-710a-4e2a-b927-dca1fbe1eb49"]
+}, Open  ]],
+Cell[19890, 584, 356, 9, 38, "Input", "ExpressionUUID" -> \
+"49fac3f4-7d47-4a36-a723-d557975befa3"],
+Cell[CellGroupData[{
+Cell[20271, 597, 299, 5, 38, "Input", "ExpressionUUID" -> \
+"cc8869ce-51ef-4790-842e-1b748d150abb"],
+Cell[20573, 604, 331, 5, 38, "Output", "ExpressionUUID" -> \
+"c2d680db-254f-4f7d-830f-dca921f8e7c2"]
+}, Open  ]],
+Cell[20919, 612, 480, 12, 87, "Input", "ExpressionUUID" -> \
+"10cdd433-f1df-469f-8e09-93c7b1363276"],
+Cell[CellGroupData[{
+Cell[21424, 628, 200, 4, 38, "Input", "ExpressionUUID" -> \
+"0fb068e0-98a5-4b99-b551-fdbe6d37125d"],
+Cell[21627, 634, 143, 2, 38, "Output", "ExpressionUUID" -> \
+"ad01e17c-2c49-49ad-973c-a336745f01a5"]
+}, Open  ]],
+Cell[21785, 639, 638, 17, 62, "ItemNumbered", "ExpressionUUID" -> \
+"7a2131d0-ef7e-4b36-a564-9ececde613b4"],
+Cell[22426, 658, 695, 16, 87, "Input", "ExpressionUUID" -> \
+"eea19cd0-3351-42ed-b368-88a4437dc2ec"],
+Cell[23124, 676, 311, 7, 38, "Input", "ExpressionUUID" -> \
+"9775e2c1-941f-4362-bcb3-fb725107f0b2"],
+Cell[CellGroupData[{
+Cell[23460, 687, 241, 5, 38, "Input", "ExpressionUUID" -> \
+"2742b909-f23c-4c51-9619-ad40c74e79ab"],
+Cell[23704, 694, 213, 4, 38, "Output", "ExpressionUUID" -> \
+"a22e1963-7c41-4ac4-a155-4487e230a572"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23954, 703, 217, 4, 38, "Input", "ExpressionUUID" -> \
+"b5fd44d1-c85e-474e-80fc-1b4d3c4d8332"],
+Cell[24174, 709, 155, 3, 71, "Output", "ExpressionUUID" -> \
+"55a58d9e-c0ff-46fc-a8d0-42abee81f448"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
